@@ -1,0 +1,65 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=BioRhyme:wght@200;300;400;700;800&display=swap');
+@tailwind base;
+/* @tailwind components; */
+@tailwind utilities;
+
+.chip {
+  @apply font-BioRhyme rounded-full bg-gray-100 text-black dark:text-white dark:bg-dark2 no-underline text-center 
+  whitespace-nowrap py-1 px-3 text-sm font-medium hover:bg-gray-200 dark:hover:bg-dark1 focus:bg-gray-300 dark:focus:bg-dark1 cursor-pointer m-2 inline-block transition;
+}
+
+.btn-small {
+  @apply mt-1 py-1 px-5 rounded-md w-min select-none cursor-pointer flex items-center justify-center 
+  hover:bg-gray-100 dark:hover:bg-dark2;
+}
+
+.btn-filter {
+  @apply mt-1 py-1 px-2 sm:px-5 rounded-md w-min select-none cursor-pointer flex items-center justify-center hover:bg-gray-100 dark:hover:bg-transparent sm:dark:hover:bg-dark2;
+}
+
+.green {
+  @apply bg-green-500 hover:bg-green-400
+    text-white;
+}
+
+.light {
+  @apply bg-gray-100 hover:bg-gray-200 text-green-500;
+}
+
+.btn-action {
+  @apply px-2 pt-1 pb-1 cursor-pointer bg-red-200 dark:bg-dark1 dark:hover:bg-black  dark:text-white flex 
+  justify-center items-center w-8 h-8 mx-2 my-1 font-semibold rounded-lg transition;
+}
+
+.btn-medium {
+  @apply block w-max  text-center cursor-pointer  items-center no-underline select-none text-indigo-500  hover:bg-gray-100 dark:hover:bg-dark2  font-medium px-3 py-2 rounded-md transition-all focus:outline-none focus:ring focus:ring-indigo-700 focus:ring-opacity-75 font-BioRhyme;
+}
+
+.blueish {
+  @apply text-white bg-indigo-600 dark:hover:bg-indigo-700 focus:bg-indigo-700;
+}
+
+.blueish-active {
+  @apply text-white bg-indigo-800 hover:bg-indigo-900;
+}
+
+.redish {
+  @apply text-white bg-red-600 hover:bg-red-700;
+}
+
+ul {
+  @apply list-none;
+}
+
+input,
+select,
+textarea {
+  @apply focus:outline-none focus:ring focus:ring-indigo-700/75;
+}
+
+router-link,
+a,
+button {
+  @apply outline-none focus:outline-none;
+}
