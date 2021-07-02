@@ -90,7 +90,10 @@
             </div>
           </div>
         </div>
-        <div class="dark:text-gray-400 text-sm mt-1" v-if="thumbnail">
+        <div
+          class="dark:text-gray-400 text-sm mt-1 font-BioRhyme"
+          v-if="thumbnail"
+        >
           {{ tweakDate(post.createdAt) }}
         </div>
         <p
@@ -132,7 +135,7 @@
           </svg>
 
           <span
-            class="ml-1 whitespace-pre text-gray-600 dark:text-gray-200 select-none"
+            class="ml-1 whitespace-pre text-gray-600 dark:text-gray-200 select-none font-BioRhyme"
             style="line-height: 22px"
             >{{ post.likes.length }} likes</span
           >
@@ -156,7 +159,7 @@ const user = computed(() => {
 })
 
 const isCurrentUser = computed(() => {
-  return user.value.displayName === route.params.username
+  return user.value?.displayName === route.params.username
 })
 
 const mnuToggle = (id) => {

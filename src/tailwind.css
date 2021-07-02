@@ -1,16 +1,18 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=BioRhyme:wght@200;300;400;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;500;700&display=swap');
 @tailwind base;
 /* @tailwind components; */
 @tailwind utilities;
 
 .chip {
   @apply font-BioRhyme rounded-full bg-gray-100 text-black dark:text-white dark:bg-dark2 no-underline text-center 
-  whitespace-nowrap py-1 px-3 text-sm font-medium hover:bg-gray-200 dark:hover:bg-dark1 focus:bg-gray-300 dark:focus:bg-dark1 cursor-pointer m-2 inline-block transition;
+  whitespace-nowrap 
+  py-1 px-3 text-sm font-medium hover:bg-gray-200 dark:hover:bg-dark1 focus:bg-gray-300 dark:focus:bg-dark1 cursor-pointer m-2 inline-block transition;
 }
 
 .btn-small {
-  @apply mt-1 py-1 px-5 rounded-md w-min select-none cursor-pointer flex items-center justify-center 
+  @apply mt-1 py-1 px-5 rounded-md w-min 
+  select-none cursor-pointer flex items-center justify-center 
   hover:bg-gray-100 dark:hover:bg-dark2;
 }
 

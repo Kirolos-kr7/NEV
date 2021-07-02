@@ -31,6 +31,7 @@ module.exports = {
       },
       fontFamily: {
         BioRhyme: 'BioRhyme',
+        Quicksand: 'Quicksand, Helvetica, sans-serif',
       },
     },
   },
