@@ -4,7 +4,10 @@
     <div
       class="pt-20 sm:pt-24 dark:text-white w-full sm:w-10/12 md:w-9/12 lg:w-8/12 mx-auto"
     >
-      <h2 class="mb-5 mx-3 sm:mx-0">{{ user.displayName + "'s Settings" }}</h2>
+      <h2 class="p-3 dark:text-white font-BioRhyme font-normal text-xl">
+        {{ user.displayName + "'s Settings" }}
+        <Colors />
+      </h2>
       <div class="sm:px-5">
         <!-- <ul class="px-0 col-span-1">
           <li
@@ -81,6 +84,7 @@
             :website="website"
             :email="email"
             :countries="countries"
+            :bio="bio"
           />
         </div>
       </div>
@@ -98,6 +102,7 @@ import Navbar from '../components/Navbar.vue'
 import Footer from '../components/Footer.vue'
 import Loading from '../components/Loading.vue'
 import EditPersonal from '../components/EditPersonal.vue'
+import Colors from '../components/Colors.vue'
 
 let user = computed(() => {
   return store.state.user
@@ -110,6 +115,8 @@ let userData = ref({}),
   location = ref(),
   website = ref(),
   email = ref(),
+  image = ref(),
+  bio = ref(),
   countries = ref([
     { name: 'Afghanistan', code: 'AF' },
     { name: 'Åland Islands', code: 'AX' },
@@ -370,6 +377,8 @@ onMounted(() => {
         location.value = user.data().location
         website.value = user.data().website
         email.value = user.data().email
+        image.value = user.data().image
+        bio.value = user.data().bio
         loaded.value = true
       })
     })

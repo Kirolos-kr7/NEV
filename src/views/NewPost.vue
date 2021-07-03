@@ -485,7 +485,7 @@
           type="file"
           class="hidden"
           @change="imageChange"
-          acccept="image/*"
+          accept="image/*"
           ref="postImage"
         />
         <button

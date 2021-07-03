@@ -1,48 +1,33 @@
 <template>
   <form class="p-3 py-5">
     <div class="input-wrapper w-full sm:px-2">
-      <h3 class="font-medium text-gray-800 dark:text-gray-300 text-base">
+      <label
+        for="fullName"
+        class="font-medium text-gray-800 dark:text-white text-base"
+      >
         Full Name
-      </h3>
+      </label>
       <input
         type="text"
+        id="fullName"
         v-model="fullName"
         class="w-full px-3 mt-1 mb-6 h-10 border border-solid dark:text-white bg-gray-50 dark:bg-dark4 border-gray-300 dark:border-dark1 rounded-lg text-lg"
         autocomplete="on"
         required
       />
     </div>
-    <div class="input-wrapper w-full sm:px-2">
-      <h3 class="font-medium text-gray-800 dark:text-gray-300 text-base">
-        Username
-      </h3>
-      <input
-        type="text"
-        v-model="username"
-        class="w-full px-3 mt-1 mb-6 h-10 border border-solid dark:text-gray-300 bg-gray-50 dark:bg-dark4 border-gray-300 dark:border-dark1 rounded-lg text-lg"
-        autocomplete="on"
-        required
-      />
-    </div>
-    <div class="input-wrapper relative w-full sm:px-2">
-      <h3 class="font-medium text-gray-800 dark:text-gray-300 text-base">
-        E-mail
-      </h3>
-      <input
-        type="text"
-        v-model="email"
-        class="w-full px-3 mt-1 mb-6 h-10 border border-solid dark:text-gray-300 bg-gray-50 dark:bg-dark4 border-gray-300 dark:border-dark1 rounded-lg text-lg"
-        autocomplete="on"
-        required
-      />
-    </div>
+
     <div class="input-wrapper location-wrapper relative w-full sm:px-2">
-      <h3 class="font-medium text-gray-800 dark:text-gray-300 text-base">
+      <label
+        for="location"
+        class="font-medium text-gray-800 dark:text-white text-base"
+      >
         Location
-      </h3>
+      </label>
       <select
         name="location"
-        class="location w-full appearance-none cursor-pointer px-3 mt-1 mb-6 h-10 border border-solid dark:text-gray-300 bg-gray-50 dark:bg-dark4 border-gray-300 dark:border-dark1 rounded-lg text-lg"
+        id="location"
+        class="location w-full appearance-none cursor-pointer px-3 mt-1 mb-6 h-10 border border-solid dark:text-white bg-gray-50 dark:bg-dark4 border-gray-300 dark:border-dark1 rounded-lg text-lg"
         v-model="location"
         required
       >
@@ -72,27 +57,36 @@
       </svg>
     </div>
 
-    <div class="input-wrapper w-full sm:px-2">
-      <h3 class="font-medium text-gray-800 dark:text-gray-300 text-base">
-        Profile Image (Optional)
-      </h3>
-      <input
-        type="file"
-        class="w-full px-3 image py-1 mt-1 mb-6 h-10 border border-solid dark:text-gray-300 bg-gray-50 dark:bg-dark4 appearance-none border-gray-300 dark:border-dark1 rounded-lg text-lg"
-        autocomplete="on"
-      />
-    </div>
     <div class="input-wrapper relative w-full sm:px-2">
-      <h3 class="font-medium text-gray-800 dark:text-gray-300 text-base">
-        Website (Optional)
-      </h3>
+      <label
+        for="website"
+        class="font-medium text-gray-800 dark:text-white text-base"
+      >
+        Website <span class="text-specialGray text-xs">[Optional]</span>
+      </label>
       <input
         type="text"
+        id="website"
         v-model="website"
-        class="w-full px-3 mt-1 mb-6 h-10 border border-solid dark:text-gray-300 bg-gray-50 dark:bg-dark4 border-gray-300 dark:border-dark1 rounded-lg text-lg"
+        class="w-full px-3 mt-1 mb-6 h-10 border border-solid dark:text-white bg-gray-50 dark:bg-dark4 border-gray-300 dark:border-dark1 rounded-lg text-lg"
         autocomplete="on"
         required
       />
+    </div>
+
+    <div class="input-wrapper relative w-full sm:px-2">
+      <label
+        for="bio"
+        class="font-medium text-gray-800 dark:text-white text-base"
+      >
+        Bio <span class="text-specialGray text-xs">[Optional]</span>
+      </label>
+      <textarea
+        class="w-full px-3 py-1 mt-1 mb-6 border border-solid dark:text-white bg-gray-50 dark:bg-dark4 border-gray-300 dark:border-dark1 rounded-lg text-lg"
+        v-model="bio"
+        id="bio"
+        rows="4"
+      ></textarea>
     </div>
 
     <div
@@ -178,21 +172,22 @@ import { useRouter } from 'vue-router'
 import { db, storage } from '../firebase'
 import { store } from '../store'
 import Loading from '../components/Loading.vue'
+import ImgBlock from '../components/ImgBlock.vue'
 let error = ref(''),
   loading = ref(false),
   FN_REGEX = /^[A-Za-z- ]{3,}$/,
   UN_REGEX = /^[a-z0-9-_]{3,}$/,
   E_REGEX = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
-  PW_REGEX = /^[A-Za-z0-9]\w{7,}$/,
   WEBSITE_REGEX = /^((https?|ftp|smtp):\/\/)?(www.)?[a-z0-9]+\.[a-z]+(\/[a-zA-Z0-9#]+\/?)*$/
 
 const props = defineProps({
   fullName: String,
-  username: String,
   location: String,
   website: String,
+  username: String,
   email: String,
   countries: Array,
+  bio: String,
 })
 
 let user = computed(() => {
@@ -204,36 +199,16 @@ let router = useRouter()
 const updateUser = () => {
   if (props.fullName.match(FN_REGEX)) {
     error.value = ''
-    if (props.username.match(UN_REGEX)) {
+    if (props.email.match(E_REGEX)) {
       error.value = ''
-      if (props.email.match(E_REGEX)) {
+      if (props.website.match(WEBSITE_REGEX) || props.website === '') {
         error.value = ''
-        if (props.website.match(WEBSITE_REGEX) || props.website === '') {
-          error.value = ''
-          if (
-            document.querySelector('.image').files[0] != undefined ||
-            document.querySelector('.image').files[0] != null
-          ) {
-            const stRef = storage.ref(
-              'users/' + document.querySelector('.image').files[0].name,
-            )
-
-            stRef.put(document.querySelector('.image').files[0])
-            stRef.getDownloadURL().then((res) => {
-              go(res)
-            })
-          } else {
-            go(null)
-          }
-        } else {
-          error.value = 'Website is not valid'
-        }
+        go()
       } else {
-        error.value = 'E-mail is not valid'
+        error.value = 'Website is not valid'
       }
     } else {
-      error.value =
-        'Username is not valid \nAtleast three characters (small, numbers, -, _)'
+      error.value = 'E-mail is not valid'
     }
   } else {
     error.value =
@@ -241,30 +216,27 @@ const updateUser = () => {
   }
 }
 
-const go = (img) => {
+const go = () => {
   loading.value = true
-  user.value
-    .updateProfile({
-      displayName: props.username.toLowerCase(),
-      photoURL: img,
+  db.collection('users')
+    .doc(props.email)
+    .update({
+      fullName: props.fullName,
+      username: props.username.toLowerCase(),
+      location: props.location,
+      website: props.website,
+      bio: props.bio,
     })
     .then(() => {
-      db.collection('users').doc(props.email).set({
-        fullName: props.fullName,
-        username: props.username.toLowerCase(),
-        joinDate: new Date().toDateString(),
-        email: props.email,
-        location: props.location,
-        bio: null,
-        website: props.website,
-        image: img,
+      user.value.updateProfile({
+        displayName: props.username.toLowerCase(),
       })
+    })
+    .then(() => {
       location.reload()
     })
     .catch((err) => {
-      err.code === 'auth/email-already-in-use'
-        ? (error.value = 'Email already in use')
-        : (error.value = err.code)
+      console.log(err)
     })
 }
 </script>

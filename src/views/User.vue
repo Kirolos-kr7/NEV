@@ -47,7 +47,7 @@
           class="icon-wrapper md:w-1/3 flex gap-2 md:block md:text-center mx-3"
         >
           <svg
-            class="w-6 h-6 block mx-auto mb-2"
+            class="w-6 h-6 block mx-auto mb-2 dark:text-slateGray"
             fill="#e3e3e3"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -72,7 +72,7 @@
           class="icon-wrapper md:w-1/3 flex gap-2 md:block md:text-center mx-3"
         >
           <svg
-            class="w-6 h-6 block mx-auto mb-2"
+            class="w-6 h-6 block mx-auto mb-2 dark:text-slateGray"
             fill="#e3e3e3"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -93,7 +93,7 @@
           class="icon-wrapper md:w-1/3 flex gap-2 md:block md:text-center mx-3"
         >
           <svg
-            class="w-6 h-6 block mx-auto mb-2"
+            class="w-6 h-6 block mx-auto mb-2 dark:text-slateGray"
             fill="#e3e3e3"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -119,7 +119,7 @@
           v-if="user?.website"
         >
           <svg
-            class="w-6 h-6 block mx-auto mb-2"
+            class="w-6 h-6 block mx-auto mb-2 dark:text-slateGray"
             fill="#e3e3e3"
             stroke="currentColor"
             viewBox="0 0 24 24"

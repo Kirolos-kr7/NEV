@@ -10,6 +10,7 @@ module.exports = {
         dark3: '#252525',
         dark4: '#333',
         specialGray: '#A0A0A0',
+        slateGray: '#708090',
       },
       backgroundColor: {
         primary: '#eef0f1',
