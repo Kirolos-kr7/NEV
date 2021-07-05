@@ -12,37 +12,39 @@
         <h2 class="text-xl mb-4 font-bold dark:text-white font-BioRhyme">
           Tags
         </h2>
-        <div
-          class="chips flex items-center overflow-y-scroll md:block relative -mx-5 md:mx-0"
-        >
-          <SideTags />
-        </div>
+        <SideTags />
       </div>
 
       <div
         class="w-full lg:w-6/12 md:w-11/12 flex md:order-2 lg:order-1 flex-row flex-wrap justify-evenly mb-5"
       >
         <div class="flex items-center justify-between w-full h-10 m-5 mt-2">
-          <h2
-            class="text-2xl font-bold block mr-auto ml-1 dark:text-white font-BioRhyme"
-          >
-            Feed
-          </h2>
+          <transition appear name="fadeIn">
+            <h2
+              class="text-2xl font-bold block mr-auto ml-1 dark:text-white font-BioRhyme"
+            >
+              Feed
+            </h2>
+          </transition>
           <div class="flex gap-1">
-            <button
-              class="btn-filter active dark:text-white font-BioRhyme dark:focus:bg-dark1 focus:bg-gray-400"
-              @click="fetchPostsBy('createdAt')"
-              id="filterByDate"
-            >
-              Newest
-            </button>
-            <button
-              class="btn-filter whitespace-nowrap dark:text-white font-BioRhyme dark:focus:bg-dark1 focus:bg-gray-400"
-              @click="fetchPostsBy('likes_count')"
-              id="filterByLikes"
-            >
-              Most Liked
-            </button>
+            <transition-group appear name="fadeIn">
+              <button
+                key="1"
+                class="btn-filter active transition dark:text-white font-BioRhyme dark:focus:bg-dark1 focus:bg-gray-400"
+                @click="fetchPostsBy('createdAt')"
+                id="filterByDate"
+              >
+                Newest
+              </button>
+              <button
+                key="2"
+                class="btn-filter whitespace-nowrap transition dark:text-white font-BioRhyme dark:focus:bg-dark1 focus:bg-gray-400"
+                @click="fetchPostsBy('likes_count')"
+                id="filterByLikes"
+              >
+                Most Liked
+              </button>
+            </transition-group>
           </div>
         </div>
 
@@ -123,9 +125,6 @@ const fetchPostsBy = async (by = 'createdAt') => {
 .posts {
   min-height: 150px;
 }
-.chips::-webkit-scrollbar {
-  display: none;
-}
 
 #filterByLikes,
 #filterByDate,
@@ -146,5 +145,14 @@ const fetchPostsBy = async (by = 'createdAt') => {
   left: 50%;
   transition: 0.2s all ease-in-out;
   transform: translateX(-50%);
+}
+
+#filterByDate {
+  transition: opacity 0.2s ease;
+  transition-delay: 0.05s;
+}
+#filterByLikes {
+  transition: opacity 0.2s ease;
+  transition-delay: 0.1s;
 }
 </style>

@@ -38,7 +38,7 @@ body {
 ::-webkit-scrollbar-thumb {
   border-radius: 15px;
   background: #c9c9c9;
-  border: 3px solid #fbfcfb;
+  border: 3px solid #eef0f1;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -47,6 +47,10 @@ body {
 
 ::-webkit-scrollbar-track-piece {
   margin: 3px;
+}
+
+::-webkit-scrollbar {
+  background: #eef0f1;
 }
 
 .dark ::-webkit-scrollbar-thumb {
@@ -72,5 +76,23 @@ body {
   left: 0;
   width: 0px;
   height: 1px;
+}
+
+.fadeIn-enter-active {
+  transition: opacity 0.5s ease;
+}
+
+.fadeIn-enter-from {
+  opacity: 0;
+}
+
+.fadeInDown-enter-active {
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.fadeInDown-enter-from {
+  opacity: 0;
+  position: absolute;
+  transform: translateY(-10px);
 }
 </style>

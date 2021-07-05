@@ -1,6 +1,6 @@
 <template>
   <form class="p-3 py-5">
-    <div class="input-wrapper w-full sm:px-2">
+    <div class="input-wrapper w-full sm:px-2 mb-4">
       <label
         for="fullName"
         class="font-medium text-gray-800 dark:text-white text-base"
@@ -11,13 +11,13 @@
         type="text"
         id="fullName"
         v-model="fullName"
-        class="w-full px-3 mt-1 mb-6 h-10 border border-solid dark:text-white bg-gray-50 dark:bg-dark4 border-gray-300 dark:border-dark1 rounded-lg text-lg"
+        class="w-full px-3 mt-1 h-10 border border-solid dark:text-white bg-gray-50 dark:bg-dark4 border-gray-300 dark:border-dark1 rounded-lg text-lg"
         autocomplete="on"
         required
       />
     </div>
 
-    <div class="input-wrapper location-wrapper relative w-full sm:px-2">
+    <div class="input-wrapper location-wrapper relative w-full sm:px-2 mb-4">
       <label
         for="location"
         class="font-medium text-gray-800 dark:text-white text-base"
@@ -27,7 +27,7 @@
       <select
         name="location"
         id="location"
-        class="location w-full appearance-none cursor-pointer px-3 mt-1 mb-6 h-10 border border-solid dark:text-white bg-gray-50 dark:bg-dark4 border-gray-300 dark:border-dark1 rounded-lg text-lg"
+        class="location w-full appearance-none cursor-pointer px-3 mt-1 h-10 border border-solid dark:text-white bg-gray-50 dark:bg-dark4 border-gray-300 dark:border-dark1 rounded-lg text-lg"
         v-model="location"
         required
       >
@@ -57,7 +57,7 @@
       </svg>
     </div>
 
-    <div class="input-wrapper relative w-full sm:px-2">
+    <div class="input-wrapper relative w-full sm:px-2 mb-4">
       <label
         for="website"
         class="font-medium text-gray-800 dark:text-white text-base"
@@ -68,13 +68,13 @@
         type="text"
         id="website"
         v-model="website"
-        class="w-full px-3 mt-1 mb-6 h-10 border border-solid dark:text-white bg-gray-50 dark:bg-dark4 border-gray-300 dark:border-dark1 rounded-lg text-lg"
+        class="w-full px-3 mt-1 h-10 border border-solid dark:text-white bg-gray-50 dark:bg-dark4 border-gray-300 dark:border-dark1 rounded-lg text-lg"
         autocomplete="on"
         required
       />
     </div>
 
-    <div class="input-wrapper relative w-full sm:px-2">
+    <div class="input-wrapper relative w-full sm:px-2 mb-4">
       <label
         for="bio"
         class="font-medium text-gray-800 dark:text-white text-base"
@@ -82,7 +82,7 @@
         Bio <span class="text-specialGray text-xs">[Optional]</span>
       </label>
       <textarea
-        class="w-full px-3 py-1 mt-1 mb-6 border border-solid dark:text-white bg-gray-50 dark:bg-dark4 border-gray-300 dark:border-dark1 rounded-lg text-lg"
+        class="w-full px-3 py-1 mt-1 border border-solid dark:text-white bg-gray-50 dark:bg-dark4 border-gray-300 dark:border-dark1 rounded-lg text-lg"
         v-model="bio"
         id="bio"
         rows="4"
@@ -90,7 +90,7 @@
     </div>
 
     <div
-      class="err flex items-center text-white bg-red-100 dark:bg-red-900 mb-6 pl-3 border border-red-300 dark:border-dark1 border-solid p-2 mx-2 rounded-lg transition-all"
+      class="err flex items-center text-white bg-red-100 dark:bg-red-900 pl-3 border border-red-300 dark:border-dark1 border-solid p-2 mx-2 rounded-lg transition-all"
       v-if="error"
     >
       <svg
@@ -148,8 +148,13 @@
       </svg>
       <span class="ml-2 whitespace-pre-wrap"> {{ error }}</span>
     </div>
-    <div class="btn-medium blueish mx-auto min-w-full" @click="updateUser">
-      Save
+    <div class="flex justify-center items-center gap-3 mx-3">
+      <button class="btn-medium blueish !w-1/2" @click.prevent="updateUser">
+        Save
+      </button>
+      <button class="btn-medium redish !w-1/2" @click.prevent="removeUser">
+        Remove Account
+      </button>
     </div>
   </form>
 
@@ -239,4 +244,6 @@ const go = () => {
       console.log(err)
     })
 }
+
+const removeUser = () => {}
 </script>

@@ -5,88 +5,103 @@
       class="pt-20 sm:pt-24 dark:text-white w-full sm:w-10/12 md:w-9/12 lg:w-8/12 mx-auto"
     >
       <h2 class="p-3 dark:text-white font-BioRhyme font-normal text-xl">
-        {{ user.displayName + "'s Settings" }}
+        {{ user?.displayName + "'s Settings" }}
         <Colors />
       </h2>
-      <div class="sm:px-5">
-        <!-- <ul class="px-0 col-span-1">
-          <li
-            class="flex items-center hover:bg-gray-200 dark:hover:bg-dark2 w-full text-lg rounded-md my-2 px-3 py-2 cursor-pointer"
-          >
-            <svg
-              class="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
+      <div class="grid md:grid-cols-[1fr,3fr] gap-3">
+        <ul class="px-0 col-span-1">
+          <li>
+            <button
+              class="flex items-center hover:bg-gray-200 dark:hover:bg-dark2 focus:bg-gray-300 dark:focus:bg-dark3 w-full text-lg rounded-md my-2 px-3 py-2 cursor-pointer"
+              @click="currPage = 'personal'"
             >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              ></path>
-            </svg>
-            <span class="ml-2">Personal</span>
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                ></path>
+              </svg>
+              <span class="ml-2">Personal</span>
+            </button>
           </li>
-          <li
-            class="flex items-center hover:bg-gray-200 dark:hover:bg-dark2 w-full text-lg rounded-md my-2 px-3 py-2 cursor-pointer"
-          >
-            <svg
-              class="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
+          <li>
+            <button
+              class="flex items-center hover:bg-gray-200 dark:hover:bg-dark2 focus:bg-gray-300 dark:focus:bg-dark3 w-full text-lg rounded-md my-2 px-3 py-2 cursor-pointer"
+              @click="currPage = 'image'"
             >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"
-              ></path></svg
-            ><span class="ml-2">Account</span>
+              <svg
+                class="w-6 h-6"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"
+                  clip-rule="evenodd"
+                ></path></svg
+              ><span class="ml-2">Image</span>
+            </button>
           </li>
-          <li
-            class="flex items-center hover:bg-gray-200 dark:hover:bg-dark2 w-full text-lg rounded-md my-2 px-3 py-2 cursor-pointer"
-          >
-            <svg
-              class="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
+          <li>
+            <button
+              class="flex items-center hover:bg-gray-200 dark:hover:bg-dark2 focus:bg-gray-300 dark:focus:bg-dark3 w-full text-lg rounded-md my-2 px-3 py-2 cursor-pointer"
+              @click="currPage = 'customization'"
             >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-              ></path>
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-              ></path>
-            </svg>
-            <span class="ml-2">Customization</span>
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                ></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                ></path>
+              </svg>
+              <span class="ml-2">Customization</span>
+            </button>
           </li>
-          <li></li>
-        </ul> -->
-        <div
-          class="w-full px-3 sm:px-0 bg-white dark:bg-dark2 border border-gray-300 border-solid dark:border-transparent rounded-md"
-        >
-          <EditPersonal
-            :fullName="fullName"
-            :username="username"
-            :location="location"
-            :website="website"
-            :email="email"
-            :countries="countries"
-            :bio="bio"
-          />
-        </div>
+        </ul>
+        <transition-group name="fadeInRight" mode="out-in">
+          <div
+            class="w-full px-3 sm:px-0 bg-white dark:bg-dark2 border border-gray-300 border-solid dark:border-transparent rounded-md"
+            v-if="currPage === 'personal'"
+          >
+            <EditPersonal
+              :fullName="fullName"
+              :username="username"
+              :location="location"
+              :website="website"
+              :email="email"
+              :countries="countries"
+              :bio="bio"
+            />
+          </div>
+          <div
+            class="w-full px-3 sm:px-0 bg-white dark:bg-dark2 border border-gray-300 border-solid dark:border-transparent rounded-md"
+            v-if="currPage === 'image'"
+          >
+            <ImgBlock :image="image" />
+          </div>
+        </transition-group>
       </div>
     </div>
     <Footer class="mt-8" />
@@ -102,11 +117,14 @@ import Navbar from '../components/Navbar.vue'
 import Footer from '../components/Footer.vue'
 import Loading from '../components/Loading.vue'
 import EditPersonal from '../components/EditPersonal.vue'
+import ImgBlock from '../components/ImgBlock.vue'
 import Colors from '../components/Colors.vue'
 
 let user = computed(() => {
   return store.state.user
 })
+
+let currPage = ref('personal')
 
 let userData = ref({}),
   loaded = ref(false),
@@ -387,3 +405,15 @@ onMounted(() => {
     })
 })
 </script>
+
+<style>
+.fadeInRight-enter-active {
+  transition: opacity 0.8s ease, transform 1s ease;
+}
+
+.fadeInRight-enter-from {
+  opacity: 0;
+  transform: translateX(100px);
+  position: relative;
+}
+</style>

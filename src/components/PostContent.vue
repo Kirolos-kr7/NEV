@@ -83,6 +83,24 @@ export default {
   border-radius: 0.25rem;
   white-space: pre;
 }
+
+.content pre::-webkit-scrollbar-thumb,
+.ProseMirror pre ::-webkit-scrollbar-thumb {
+  border-radius: 15px;
+  background: #444;
+  border: 3px solid #191919;
+}
+
+.content pre::-webkit-scrollbar-thumb:hover,
+.ProseMirror pre ::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.content pre::-webkit-scrollbar,
+.ProseMirror pre ::-webkit-scrollbar {
+  background: #191919;
+}
+
 .content pre code,
 .ProseMirror pre code {
   font-family: 'Source Code Pro', monospace;

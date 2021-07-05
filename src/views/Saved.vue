@@ -6,10 +6,12 @@
       style="min-height: 80vh"
       v-if="loaded"
     >
-      <h2 class="p-3 dark:text-white font-BioRhyme font-normal text-xl">
-        Posts You Liked
-        <Colors />
-      </h2>
+      <transition appear name="fadeIn">
+        <h2 class="p-3 dark:text-white font-BioRhyme font-normal text-xl">
+          Posts You Liked
+          <Colors />
+        </h2>
+      </transition>
 
       <div
         class="posts mt-6 grid md:grid-cols-2 gap-x-5 items-center justify-evenly"

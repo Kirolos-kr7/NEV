@@ -1,6 +1,6 @@
 <template>
   <div class="discussion mt-5" :class="!comments.length > 0 ? 'mb-6' : 'mb-2'">
-    <h2 class="text-2xl font-extrabold">
+    <h2 class="text-2xl font-extrabold font-BioRhyme">
       Discussion {{ comments.length > 0 ? '(' + comments.length + ')' : ' ' }}
     </h2>
     <div class="comment-area text-right w-11/12 mx-auto mt-6 sm:mt-8">
@@ -41,7 +41,7 @@
             class="flex items-center text-black no-underline"
           >
             <div
-              class="img-wrapper w-9 h-9 rounded-full overflow-hidden mr-2 transform -translate-y-2"
+              class="img-wrapper w-9 h-9 rounded-full overflow-hidden mr-2 transform -translate-y-2.5 bg-gray-300"
             >
               <img
                 v-if="comment.byImage"
@@ -52,14 +52,13 @@
               <img
                 v-else
                 src="../assets/anonymous.png"
-                loading="lazy"
                 alt="user picture"
                 class="w-full"
               />
             </div>
           </router-link>
           <div
-            class="comment-data w-full border border-solid py-6 px-4 mt-5 dark:bg-dark2 border-gray-200 dark:border-dark1 rounded-md transition-all"
+            class="comment w-full border border-solid py-6 px-4 mt-5 dark:bg-dark2 border-gray-200 dark:border-dark1 rounded-md transition-all"
           >
             <div class="flex items-center justify-between mb-2">
               <div
@@ -122,12 +121,12 @@
           </div>
         </div>
         <div
-          class="btn-small ml-8"
+          class="btn-small ml-[2.7rem]"
           :class="user ? '' : 'opacity-30'"
           @click="like(comment.likes, comment.id)"
         >
           <svg
-            class="w-6 h-6 transition-all text-black"
+            class="w-6 h-6 transition-all text-black -ml-0.5"
             :class="likedByUser(comment.likes)"
             :id="'l' + comment.id"
             fill="#9ca3af3d"

@@ -1,5 +1,5 @@
 <template>
-  <div class="pt-5 md:overflow-y-scroll min-h-screen">
+  <div class="md:overflow-y-scroll min-h-screen">
     <div class="topish bg-black h-48"></div>
 
     <div

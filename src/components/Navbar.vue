@@ -235,6 +235,7 @@
 
 <script setup>
 import { computed, onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { store } from '../store'
 import Sidenav from '../components/Sidenav.vue'
 
@@ -278,8 +279,11 @@ const user = computed(() => {
   return store.state.user
 })
 
+let router = useRouter()
+
 const logOut = () => {
   store.commit('logOut')
+  router.push('/')
 }
 
 const userMenuActions = (evt) => {

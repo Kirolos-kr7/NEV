@@ -1,7 +1,7 @@
 <template>
   <Navbar />
-  <div class="pt-5 dark:bg-dark1" v-if="loaded">
-    <div class="topish bg-black sm:h-48 h-44"></div>
+  <div class="dark:bg-dark1" v-if="loaded">
+    <div class="topish bg-black sm:h-48 h-48"></div>
 
     <div
       class="wrapper dark:bg-dark2 relative -mt-12 mb-5 pt-16 md:w-10/12 lg:w-8/12 md:border md:border-gray-300 md:dark:border-dark1 md:border-solid mx-auto p-5 rounded-md bg-white"

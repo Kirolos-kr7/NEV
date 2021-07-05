@@ -1,12 +1,18 @@
 <template>
-  <div class="sm:px-2 my-3" v-if="UserImage !== null">
+  <div class="p-5" v-if="UserImage !== null">
     <label for="">Profile Image</label>
-    <div class="rounded-full my-2 max-w-[150px] max-h-[150px] overflow-hidden">
+    <div class="rounded-full my-5 max-w-[150px] max-h-[150px] overflow-hidden">
       <img :src="UserImage" alt="personal image" class="max-w-[150px]" />
     </div>
-    <button class="btn-medium redish" @click.prevent="DeleteUserCurrentPicture">
-      Remove
-    </button>
+    <div class="flex justify-center items-center gap-3 mx-3">
+      <button
+        class="btn-medium redish !w-1/2"
+        @click.prevent="DeleteUserCurrentPicture"
+      >
+        Remove Image
+      </button>
+      <button class="btn-medium blueish !w-1/2">Save</button>
+    </div>
   </div>
 
   <div class="sm:px-2" v-if="UserImage === null">
@@ -57,10 +63,11 @@
           class="hidden sm:inline-block bg-gray-300 dark:bg-dark1 rounded-full pt-1 pb-1.5 px-3 text-sm whitespace-nowrap"
           >{{ getImageSize() }}</span
         >
-        <span
+        <button
           class="cursor-pointer p-1 pb-0 dark:hover:bg-dark1 dark:text-white rounded-md"
           @click="removeImage"
-          ><svg
+        >
+          <svg
             class="w-5 h-5"
             fill="none"
             stroke="currentColor"
@@ -72,18 +79,24 @@
               stroke-linejoin="round"
               stroke-width="2"
               d="M6 18L18 6M6 6l12 12"
-            ></path></svg
-        ></span>
+            ></path>
+          </svg>
+        </button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { defineProps, ref } from 'vue'
+
+let props = defineProps({
+  image: String,
+})
 
 let postImage = ref(),
-  isPostImage = ref(false)
+  isPostImage = ref(false),
+  UserImage = props.image
 
 const addImage = () => {
   postImage.value.click()
