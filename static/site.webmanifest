@@ -1,0 +1,36 @@
+{
+  "name": "NEV",
+  "short_name": "NEV",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "/static/favicon-16x16.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "/static/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/static/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/static/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/static/apple-touch-icon.png",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#252525",
+  "background_color": "#191919",
+  "display": "standalone",
+  "orientation": "portrait",
+  "description": "NEV - Blog For The Developers 🔥"
+}
