@@ -2,6 +2,7 @@ import firebase from 'firebase/app'
 import 'firebase/firestore'
 import 'firebase/storage'
 import 'firebase/auth'
+import { store } from './store'
 
 const firebaseConfig = {
   apiKey: 'AIzaSyBLu5gf5ecgfdjEr295iXzEVOvVs4wCTYI',
@@ -18,4 +19,9 @@ export const timestamp = firebase.firestore.FieldValue.serverTimestamp
 export const auth = firebase.auth()
 export const storage = firebase.storage()
 
-export const user = auth.currentUser
+export const isRegistered = new Promise((reslove, reject) => {
+  auth.onAuthStateChanged((user) => {
+    store.commit('setUser', { user })
+    user ? reslove(user) : reslove(null)
+  })
+})

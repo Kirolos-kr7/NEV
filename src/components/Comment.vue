@@ -196,7 +196,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, defineProps, watch } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { store } from '../store'
 import { db, timestamp } from '../firebase'
 import { useRoute } from 'vue-router'

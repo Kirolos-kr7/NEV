@@ -53,6 +53,7 @@
         </svg>
       </div>
       <div
+        @click="shareLink"
         class="icon-wrapper share cursor-pointer m-4 mb-4 rounded-full bg-indigo-100 hover:bg-indigo-300 dark:bg-indigo-700 dark:hover:bg-indigo-400 dark:bg-opacity-30 transition-all"
       >
         <svg
@@ -69,6 +70,14 @@
             d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
           ></path>
         </svg>
+        <transition name="fadeInOut">
+          <div
+            class="absolute w-max bg-white dark:bg-dark2 z-10 top-14 dark:text-white py-1 px-2 rounded-md pointer-events-none"
+            v-if="isCopiedToClipboard"
+          >
+            👌 Copied To Clipboard
+          </div>
+        </transition>
       </div>
     </div>
     <div
@@ -180,6 +189,7 @@
             </svg>
           </div>
           <div
+            @click="shareLink"
             class="icon-wrapper share cursor-pointer m-4 mb-4 rounded-full bg-indigo-100 hover:bg-indigo-300 dark:bg-indigo-700 dark:hover:bg-indigo-400 dark:bg-opacity-30 transition-all"
           >
             <svg
@@ -196,6 +206,14 @@
                 d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
               ></path>
             </svg>
+            <transition name="fadeInOut">
+              <div
+                class="absolute w-max bg-white dark:bg-dark2 z-10 bottom-14 dark:text-white py-1 px-2 rounded-md pointer-events-none"
+                v-if="isCopiedToClipboard"
+              >
+                👌 Copied To Clipboard
+              </div>
+            </transition>
           </div>
         </div>
 
@@ -284,6 +302,19 @@ const toDiscussion = () => {
   let discussion = document.querySelector('.discussion')
   discussion.scrollIntoView({ behavior: 'smooth', block: 'center' })
 }
+
+const isCopiedToClipboard = ref(false)
+
+const shareLink = () => {
+  if (isCopiedToClipboard.value !== true) {
+    isCopiedToClipboard.value = true
+    navigator.clipboard.writeText(window.location)
+
+    setTimeout(() => {
+      isCopiedToClipboard.value = false
+    }, 1500)
+  }
+}
 </script>
 
 <style scoped>
@@ -329,5 +360,15 @@ svg path {
 
 .isLiked path {
   fill: crimson;
+}
+
+.fadeInOut-enter-active,
+.fadeInOut-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.fadeInOut-enter-from,
+.fadeInOut-leave-to {
+  opacity: 0;
 }
 </style>

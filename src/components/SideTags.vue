@@ -1,3 +1,7 @@
+<script setup>
+let x = $ref('132')
+</script>
+
 <template>
   <transition-group
     appear
@@ -5,6 +9,7 @@
     tag="div"
     class="chips overflow-scroll flex items-center md:block relative -mx-2 sm:mx-5 md:mx-0"
   >
+    {{ x }}
     <router-link key="1" id="x1" :to="'/t/' + 'web'" class="chip"
       >Web</router-link
     >

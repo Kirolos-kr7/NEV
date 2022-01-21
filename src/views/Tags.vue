@@ -34,7 +34,7 @@
             <transition-group appear name="fadeIn">
               <button
                 key="1"
-                class="btn-filter active transition dark:text-white font-BioRhyme dark:focus:bg-dark1 focus:bg-gray-400"
+                class="btn-filter active transition dark:text-white font-BioRhyme dark:focus:bg-dark1"
                 @click="fetchPostsBy('createdAt')"
                 id="filterByDate"
               >
@@ -42,7 +42,7 @@
               </button>
               <button
                 key="2"
-                class="btn-filter whitespace-nowrap transition dark:text-white font-BioRhyme dark:focus:bg-dark1 focus:bg-gray-400"
+                class="btn-filter whitespace-nowrap transition dark:text-white font-BioRhyme dark:focus:bg-dark1"
                 @click="fetchPostsBy('likes_count')"
                 id="filterByLikes"
               >

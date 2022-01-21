@@ -172,7 +172,7 @@
 </template>
 
 <script setup>
-import { computed, defineProps, ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { db, storage } from '../firebase'
 import { store } from '../store'

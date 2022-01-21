@@ -10,6 +10,7 @@ import NewPost from './views/NewPost.vue'
 import Saved from './views/Saved.vue'
 import Useredit from './views/Useredit.vue'
 import { store } from './store'
+import { isRegistered } from './firebase'
 
 const routes = [
   {
@@ -77,12 +78,14 @@ const router = createRouter({
   routes,
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
+  const user = await isRegistered
+
   scrollTo(0, 0)
   let registerPage = to.matched.some((route) => route.meta.registerPage)
   let requireAuth = to.matched.some((route) => route.meta.requireAuth)
-  if (registerPage && store.state.user) next({ path: '/' })
-  else if (requireAuth && !store.state.user) next({ path: '/' })
+  if (registerPage && (await user)) next({ path: '/' })
+  else if (requireAuth && (await user)) next({ path: '/' })
   else next()
 })
 

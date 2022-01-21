@@ -2,15 +2,14 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router.js'
 import { store } from './store'
-import { auth } from './firebase'
-import './tailwind.css'
+import '../tailwind.css'
 import 'animate.css/animate.css'
 
-store.commit('getUser')
-auth.onAuthStateChanged((user) => {
-  if (user) {
-    store.commit('setUser', user)
-  }
+import { registerSW } from 'virtual:pwa-register'
+
+const updateSW = registerSW({
+  // onNeedRefresh() {},
+  // onOfflineReady() {},
 })
 
 createApp(App).use(router, store).mount('#app')

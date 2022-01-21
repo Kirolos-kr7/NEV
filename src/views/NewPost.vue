@@ -682,7 +682,7 @@ let description = ref(''),
     'webdev',
   ]),
   nextStep = ref({
-    dialog: true,
+    dialog: false,
   }),
   postImage = ref(),
   isPostImage = ref(false),

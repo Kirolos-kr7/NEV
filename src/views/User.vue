@@ -18,14 +18,16 @@
       >
         <img
           :src="user.image"
-          class="w-full"
+          class="w-full bg-gray-300 hideImg transition duration-300"
           alt="user image"
           v-if="user && user.image"
+          @load="showImg"
         />
         <img
           src="../assets/anonymous.png"
-          class="w-full bg-gray-300"
+          class="w-full bg-gray-300 hideImg transition duration-300"
           alt="user image"
+          @load="showImg"
           v-else
         />
       </div>
@@ -234,4 +236,14 @@ const fetchUserData = () => {
       console.log(err)
     })
 }
+
+const showImg = (e) => {
+  e.target.classList.remove('hideImg')
+}
 </script>
+
+<style scoped>
+.hideImg {
+  opacity: 0;
+}
+</style>

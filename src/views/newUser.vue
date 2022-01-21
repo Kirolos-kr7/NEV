@@ -5,11 +5,11 @@
       class="wrapper w-full sm:w-9/12 md:w-8/12 lg:w-6/12 sm:border sm:border-gray-300 sm:dark:border-dark1 sm:border-solid mx-auto p-5 rounded-md overflow-hidden bg-white dark:bg-dark2"
     >
       <h2
-        class="bg-gray-200 dark:bg-dark3 dark:text-white p-5 -m-5 mb-3 text-center text-2xl font-black"
+        class="bg-gray-200 dark:bg-dark3 dark:text-white p-5 -m-5 mb-3 text-center text-2xl font-black font-BioRhyme"
       >
         Join Our Community
       </h2>
-      <p class="font-medium text-center my-5 dark:text-white">
+      <p class="font-medium text-center my-5 dark:text-white font-BioRhyme">
         Over <span class="text-xl font-bold">365,326</span> brillinat developers
         and designers
       </p>

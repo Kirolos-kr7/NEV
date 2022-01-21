@@ -1,6 +1,6 @@
 <template>
-  <footer class="py-4 pb-8 bg-gray-300 dark:bg-dark2 font-BioRhyme">
-    <div class="list-none mx-auto mt-9 w-8/12">
+  <footer class="py-9 bg-gray-300 dark:bg-dark2 font-BioRhyme">
+    <div class="list-none mx-auto w-8/12">
       <div>
         <ul class="list-none p-2 text-center">
           <li class="inline-block">

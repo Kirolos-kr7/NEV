@@ -5,7 +5,7 @@
       class="wrapper w-full sm:w-9/12 md:w-8/12 lg:w-6/12 sm:border sm:border-gray-300 sm:dark:border-dark1 sm:border-solid mx-auto p-5 rounded-md overflow-hidden bg-white dark:bg-dark2"
     >
       <h2
-        class="bg-gray-200 dark:bg-dark3 dark:text-white p-5 -m-5 mb-3 text-center text-2xl font-black"
+        class="bg-gray-200 dark:bg-dark3 dark:text-white p-5 -m-5 mb-3 text-center text-2xl font-black font-BioRhyme"
       >
         Happy to have you back
       </h2>
@@ -135,8 +135,7 @@ const signInWithEmailAndPassword = () => {
     if (password.value.match(PW_REGEX)) {
       auth
         .signInWithEmailAndPassword(email.value, password.value)
-        .then((userCredential) => {
-          store.commit('setUser', userCredential.user)
+        .then(() => {
           router.push('/')
         })
         .catch((err) => {

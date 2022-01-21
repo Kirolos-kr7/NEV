@@ -7,14 +7,26 @@
     >
       <Sidenav class="hidden lg:block lg:w-2/12" :isHomePage="true" />
       <div
-        class="w-full rounded-none border-none lg:w-3/12 md:order-1 md:w-11/12 md:mb-3 lg:order-2 p-5 border border-gray-200 md:border-solid md:rounded-lg bg-white overflow-hidden dark:bg-dark3 dark:border-dark1"
+        class="w-full lg:w-3/12 md:w-11/12 md:order-1 lg:order-2 md:sticky top-24"
       >
-        <h2 class="text-xl mb-4 font-bold dark:text-white font-BioRhyme">
-          Tags
-        </h2>
-        <SideTags />
-      </div>
+        <div
+          class="rounded-none border-none md:mb-3 p-5 border border-gray-200 md:border-solid md:rounded-lg bg-white overflow-hidden dark:bg-dark3 dark:border-dark1"
+        >
+          <h2 class="text-xl mb-4 font-bold dark:text-white font-BioRhyme">
+            Tags
+          </h2>
+          <SideTags />
+        </div>
 
+        <div
+          class="rounded-none border-none md:mb-3 p-5 border border-gray-200 md:border-solid md:rounded-lg bg-white overflow-hidden dark:bg-dark3 dark:border-dark1 hidden lg:block"
+        >
+          <h2 class="text-xl mb-4 font-bold dark:text-white font-BioRhyme">
+            Top Posts
+          </h2>
+          <TopPosts />
+        </div>
+      </div>
       <div
         class="w-full lg:w-6/12 md:w-11/12 flex md:order-2 lg:order-1 flex-row flex-wrap justify-evenly mb-5"
       >
@@ -30,7 +42,7 @@
             <transition-group appear name="fadeIn">
               <button
                 key="1"
-                class="btn-filter active transition dark:text-white font-BioRhyme dark:focus:bg-dark1 focus:bg-gray-400"
+                class="btn-filter active transition dark:text-white font-BioRhyme dark:focus:bg-dark1"
                 @click="fetchPostsBy('createdAt')"
                 id="filterByDate"
               >
@@ -38,7 +50,7 @@
               </button>
               <button
                 key="2"
-                class="btn-filter whitespace-nowrap transition dark:text-white font-BioRhyme dark:focus:bg-dark1 focus:bg-gray-400"
+                class="btn-filter whitespace-nowrap transition dark:text-white font-BioRhyme dark:focus:bg-dark1"
                 @click="fetchPostsBy('likes_count')"
                 id="filterByLikes"
               >
@@ -66,6 +78,7 @@ import SideTags from '../components/SideTags.vue'
 import Post from '../components/Post.vue'
 import Loading from '../components/Loading.vue'
 import Footer from '../components/Footer.vue'
+import TopPosts from '../components/TopPosts.vue'
 
 let posts = ref([]),
   loaded = ref(false)
