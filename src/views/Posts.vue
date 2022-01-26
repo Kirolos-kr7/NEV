@@ -7,7 +7,7 @@
     >
       <Sidenav class="hidden lg:block lg:w-2/12" :isHomePage="true" />
       <div
-        class="w-full lg:w-3/12 md:w-11/12 md:order-1 lg:order-2 md:sticky top-24"
+        class="w-full lg:w-3/12 md:w-11/12 md:order-1 lg:order-2 lg:sticky top-24"
       >
         <div
           class="rounded-none border-none md:mb-3 p-5 border border-gray-200 md:border-solid md:rounded-lg bg-white overflow-hidden dark:bg-dark3 dark:border-dark1"
@@ -18,14 +18,14 @@
           <SideTags />
         </div>
 
-        <div
+        <!-- <div
           class="rounded-none border-none md:mb-3 p-5 border border-gray-200 md:border-solid md:rounded-lg bg-white overflow-hidden dark:bg-dark3 dark:border-dark1 hidden lg:block"
         >
           <h2 class="text-xl mb-4 font-bold dark:text-white font-BioRhyme">
             Top Posts
           </h2>
           <TopPosts />
-        </div>
+        </div> -->
       </div>
       <div
         class="w-full lg:w-6/12 md:w-11/12 flex md:order-2 lg:order-1 flex-row flex-wrap justify-evenly mb-5"

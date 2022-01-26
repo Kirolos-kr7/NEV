@@ -541,8 +541,9 @@
                   stroke-linejoin="round"
                   stroke-width="2"
                   d="M6 18L18 6M6 6l12 12"
-                ></path></svg
-            ></span>
+                ></path>
+              </svg>
+            </span>
           </div>
         </div>
       </div>
@@ -860,7 +861,7 @@ const getImageSize = () => {
 }
 
 .postTitle:empty::after {
-  content: 'New post title here...  ';
+  content: 'Post Title...';
   color: gray;
 }
 </style>

@@ -31,8 +31,10 @@ module.exports = {
       },
       fontFamily: {
         BioRhyme: 'BioRhyme',
-        Quicksand: 'Quicksand, Helvetica, sans-serif',
+        Roboto: '"Roboto", Helvetica, sans-serif',
+        JetBrains: '"JetBrains Mono", mono',
       },
     },
   },
+  plugins: [require('@tailwindcss/typography')],
 }
