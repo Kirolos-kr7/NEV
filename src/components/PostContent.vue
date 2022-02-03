@@ -1,5 +1,5 @@
 <template>
-  <div class="ProseMirror py-8" v-html="content"></div>
+  <div class="ProseMirror py-4" v-html="content"></div>
 </template>
 
 <script>
@@ -11,58 +11,3 @@ export default {
   },
 }
 </script>
-
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap');
-.hljs-comment,
-.hljs-quote {
-  color: #616161;
-}
-
-.hljs-variable,
-.hljs-template-variable,
-.hljs-attribute,
-.hljs-tag,
-.hljs-name,
-.hljs-regexp,
-.hljs-link,
-.hljs-name,
-.hljs-selector-id,
-.hljs-selector-class {
-  color: #f98181;
-}
-
-.hljs-number,
-.hljs-meta,
-.hljs-built_in,
-.hljs-builtin-name,
-.hljs-literal,
-.hljs-type,
-.hljs-params {
-  color: #fbbc88;
-}
-
-.hljs-string,
-.hljs-symbol,
-.hljs-bullet {
-  color: #b9f18d;
-}
-
-.hljs-title,
-.hljs-section {
-  color: #faf594;
-}
-
-.hljs-keyword,
-.hljs-selector-tag {
-  color: #70cff8;
-}
-
-.hljs-emphasis {
-  font-style: italic;
-}
-
-.hljs-strong {
-  font-weight: 700;
-}
-</style>

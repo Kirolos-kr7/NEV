@@ -12,7 +12,7 @@ body {
 }
 
 #app {
-  font-family: 'Roboto', Helvetica, sans-serif;
+  font-family: 'Montserrat', Helvetica, sans-serif;
 }
 
 * {

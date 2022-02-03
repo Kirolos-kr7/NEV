@@ -11,11 +11,11 @@
     :key="post.id"
     :style="`transition-delay: ${index / 10}s`"
   >
-    <img
-      v-if="posts[0].id === post.id && !thumbnail && post.image != null"
-      class="md:rounded-tr-lg md:rounded-tl-lg w-full max-h-[300px] min-h-[300px] overflow-hidden object-cover hideImg transition duration-300"
+    <VImage
+      v-if="!thumbnail && posts[0].id === post.id && post.image != null"
       :src="post.image"
-      @load="showImg"
+      type="blog"
+      classNames="max-h-pic"
     />
     <div class="block p-5 w-full">
       <div class="flex items-center mb-2" v-if="!thumbnail">
@@ -23,26 +23,8 @@
           :to="'/u/' + post.by"
           class="flex items-center text-black no-underline hover:text-gray-500 transition"
         >
-          <div
-            class="img-wrapper w-9 h-9 rounded-full overflow-hidden relative bg-gray-300"
-          >
-            <img
-              v-if="post?.byImage"
-              :src="post.byImage"
-              alt="user picture"
-              class="w-full transition duration-300 hideImg"
-              @load="showImg"
-            />
-            <img
-              v-else
-              src="../assets/anonymous.png"
-              alt="user picture"
-              class="w-full transition duration-300 hideImg"
-              @load="showImg"
-            />
-            <div
-              class="w-full h-full absolute top-0 hover:bg-gray-500 hover:bg-opacity-20 transition-all z-20"
-            ></div>
+          <div class="img-wrapper w-9 h-9 rounded-full overflow-hidden">
+            <VImage :src="post?.byImage" type="user" />
           </div>
           <h4
             class="font-semibold ml-3 dark:text-white font-BioRhyme hidden sm:block"
@@ -162,6 +144,7 @@ import { useRoute } from 'vue-router'
 import { db } from '../firebase'
 import { store } from '../store'
 import { tweakDate } from '../helper'
+import VImage from './VImage.vue'
 
 let route = useRoute()
 
@@ -241,10 +224,6 @@ const like = (likes, id) => {
     document.getElementById('l' + id).classList.toggle('isLiked')
   }
 }
-
-const showImg = (e) => {
-  e.target.classList.remove('hideImg')
-}
 </script>
 
 <script>
@@ -252,9 +231,3 @@ export default {
   props: ['posts', 'thumbnail'],
 }
 </script>
-
-<style scoped>
-.hideImg {
-  opacity: 0;
-}
-</style>

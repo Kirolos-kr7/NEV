@@ -31,7 +31,7 @@ module.exports = {
       },
       fontFamily: {
         BioRhyme: 'BioRhyme',
-        Roboto: '"Roboto", Helvetica, sans-serif',
+        Montserrat: '"Montserrat", Helvetica, sans-serif',
         JetBrains: '"JetBrains Mono", mono',
       },
     },

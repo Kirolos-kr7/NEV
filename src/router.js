@@ -24,12 +24,7 @@ const routes = [
     component: Tags,
   },
   {
-    path: '/u/:username',
-    name: 'User',
-    component: User,
-  },
-  {
-    path: '/u/exi',
+    path: '/login',
     name: 'existingUser',
     component: existingUser,
     meta: {
@@ -37,7 +32,7 @@ const routes = [
     },
   },
   {
-    path: '/u/new',
+    path: '/register',
     name: 'newUser',
     component: newUser,
     meta: {
@@ -45,12 +40,18 @@ const routes = [
     },
   },
   {
-    path: '/u/e',
+    path: '/u/edit',
     name: 'Useredit',
     component: Useredit,
     meta: {
       requireAuth: true,
     },
+  },
+  ,
+  {
+    path: '/u/:username',
+    name: 'User',
+    component: User,
   },
   {
     path: '/p/:slug',
@@ -79,13 +80,13 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
-  const user = await isRegistered
+  await isRegistered
 
   scrollTo(0, 0)
   let registerPage = to.matched.some((route) => route.meta.registerPage)
   let requireAuth = to.matched.some((route) => route.meta.requireAuth)
-  if (registerPage && (await user)) next({ path: '/' })
-  else if (requireAuth && (await user)) next({ path: '/' })
+  if (!store.state.user && requireAuth) next({ path: '/' })
+  else if (store.state.user && registerPage) next({ path: '/' })
   else next()
 })
 

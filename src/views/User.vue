@@ -8,28 +8,35 @@
     >
       <div class="editProfile" v-if="thisUser?.displayName === user?.username">
         <div class="absolute right-8 top-6">
-          <router-link to="/u/e" class="btn-medium blueish"
+          <router-link to="/u/edit" class="btn-medium blueish"
             >Edit Profile</router-link
           >
         </div>
       </div>
       <div
-        class="img-wrapper w-28 md:w-32 h-28 md:h-32 flex items-center overflow-hidden rounded-full absolute -top-16 left-8 md:left-1/2 md:transform md:-translate-x-1/2 border-8 border-black border-solid bg-black"
+        class="img-wrapper w-28 md:w-32 h-28 md:h-32 flex items-center overflow-hidden rounded-full absolute -top-16 left-8 md:left-1/2 md:transform md:-translate-x-1/2 border-8 border-black border-solid bg-black group"
       >
-        <img
-          :src="user.image"
-          class="w-full bg-gray-300 hideImg transition duration-300"
-          alt="user image"
-          v-if="user && user.image"
-          @load="showImg"
-        />
-        <img
-          src="../assets/anonymous.png"
-          class="w-full bg-gray-300 hideImg transition duration-300"
-          alt="user image"
-          @load="showImg"
-          v-else
-        />
+        <VImage :src="user.image" type="user" />
+        <button
+          v-if="user"
+          class="absolute opacity-0 group-hover:opacity-100 transition-opacity bg-black/30 dark:bg-white/30 text-black/60 dark:text-white/60 p-5 w-full h-full top-0 left-0 backdrop-blur-sm"
+          @click="changeImage"
+        >
+          <svg
+            class="w-full h-full"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+            ></path>
+          </svg>
+        </button>
       </div>
       <h2
         class="md:text-center font-black text-3xl mt-2 dark:text-white font-BioRhyme"
@@ -170,6 +177,20 @@
     <Footer />
   </div>
   <LoadingUser v-else />
+
+  <div
+    v-if="imageDialog"
+    class="absolute top-0 left-0 z-40 w-full h-full grid place-content-center"
+  >
+    <div
+      @click="changeImage"
+      class="fixed top-0 left-0 w-full h-full bg-black/40 backdrop-blur-sm z-0"
+    ></div>
+    <ImageUpload
+      :img="user.image"
+      :isCurrent="thisUser?.displayName === user?.username"
+    />
+  </div>
 </template>
 
 <script setup>
@@ -182,11 +203,14 @@ import Post from '../components/Post.vue'
 import LoadingUser from '../components/LoadingUser.vue'
 import Footer from '../components/Footer.vue'
 import Colors from '../components/Colors.vue'
+import VImage from '../components/VImage.vue'
+import ImageUpload from '../components/ImageUpload.vue'
 
 let route = useRoute(),
   user = ref(),
   posts = ref([]),
-  loaded = ref(false)
+  loaded = ref(false),
+  imageDialog = ref(false)
 
 const router = useRouter()
 
@@ -237,13 +261,9 @@ const fetchUserData = () => {
     })
 }
 
-const showImg = (e) => {
-  e.target.classList.remove('hideImg')
+const changeImage = () => {
+  imageDialog.value = !imageDialog.value
+  if (imageDialog.value) document.body.style.overflow = 'hidden'
+  else document.body.style.overflow = 'auto'
 }
 </script>
-
-<style scoped>
-.hideImg {
-  opacity: 0;
-}
-</style>

@@ -1,92 +1,63 @@
+<script setup>
+import { ref } from 'vue'
+import { auth } from '../firebase'
+import Loading from './Loading.vue'
+
+const newPassword = ref('')
+const newPassword1 = ref('')
+const isLoading = ref(false)
+const error = ref('')
+const PW_REGEX = /^[A-Za-z0-9]\w{7,}$/
+
+const changePassword = async () => {
+  if (newPassword.value.match(PW_REGEX)) {
+    error.value = ''
+    if (newPassword.value === newPassword1.value) {
+      error.value = ''
+      const user = auth.currentUser
+      await user.updatePassword(newPassword.value)
+      location.reload()
+    } else {
+      error.value = 'Passwords does not match'
+    }
+  } else {
+    error.value = 'Password is not valid (minimum 7 characters)'
+  }
+}
+</script>
+
 <template>
-  <form class="p-3 py-5">
+  <form class="p-3 py-5" autocomplete="off">
     <div class="input-wrapper w-full sm:px-2 mb-4">
       <label
-        for="fullName"
+        for="newPassword"
         class="font-medium text-gray-800 dark:text-white text-base"
       >
-        Full Name
+        New Password
       </label>
       <input
-        type="text"
-        id="fullName"
-        v-model="data.fullName"
+        type="password"
+        id="newPassword"
+        v-model="newPassword"
         class="w-full px-3 mt-1 h-10 border border-solid dark:text-white bg-gray-50 dark:bg-dark4 border-gray-300 dark:border-dark1 rounded-lg text-lg"
-        autocomplete="on"
         required
       />
     </div>
 
-    <div class="input-wrapper location-wrapper relative w-full sm:px-2 mb-4">
+    <div class="input-wrapper w-full sm:px-2 mb-4">
       <label
-        for="location"
+        for="newPassword1"
         class="font-medium text-gray-800 dark:text-white text-base"
       >
-        Location
-      </label>
-      <select
-        name="location"
-        id="location"
-        class="location w-full appearance-none cursor-pointer px-3 mt-1 h-10 border border-solid dark:text-white bg-gray-50 dark:bg-dark4 border-gray-300 dark:border-dark1 rounded-lg text-lg"
-        v-model="data.location"
-        required
-      >
-        <option
-          class="cursor-pointer"
-          v-for="country in data.countries"
-          :key="country"
-          :value="country.name"
-        >
-          {{ country.name }}
-        </option>
-      </select>
-      <svg
-        class="w-6 h-6 absolute top-9 right-5 pointer-events-none chev-down dark:text-white"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-        placeholder="fsdfd"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M19 9l-7 7-7-7"
-        ></path>
-      </svg>
-    </div>
-
-    <div class="input-wrapper relative w-full sm:px-2 mb-4">
-      <label
-        for="website"
-        class="font-medium text-gray-800 dark:text-white text-base"
-      >
-        Website <span class="text-specialGray text-xs">[Optional]</span>
+        Repeat Password
       </label>
       <input
-        type="text"
-        id="website"
-        v-model="data.website"
+        type="password"
+        id="newPassword1"
+        v-model="newPassword1"
         class="w-full px-3 mt-1 h-10 border border-solid dark:text-white bg-gray-50 dark:bg-dark4 border-gray-300 dark:border-dark1 rounded-lg text-lg"
-        autocomplete="on"
         required
       />
-    </div>
-
-    <div class="input-wrapper relative w-full sm:px-2">
-      <label
-        for="bio"
-        class="font-medium text-gray-800 dark:text-white text-base"
-      >
-        Bio <span class="text-specialGray text-xs">[Optional]</span>
-      </label>
-      <textarea
-        class="w-full px-3 py-1 mt-1 border border-solid dark:text-white bg-gray-50 dark:bg-dark4 border-gray-300 dark:border-dark1 rounded-lg text-lg"
-        v-model="data.bio"
-        id="bio"
-        rows="4"
-      ></textarea>
     </div>
 
     <div
@@ -148,12 +119,12 @@
       </svg>
       <span class="ml-2 whitespace-pre-wrap"> {{ error }}</span>
     </div>
-    <div class="grid sm:grid-cols-2 gap-3 sm:px-2 mt-3">
-      <button class="btn-medium redish !w-full" @click.prevent="changeCd">
-        Remove Account
-      </button>
-      <button class="btn-medium blueish !w-full" @click.prevent="updateUser">
-        Save
+    <div class="flex justify-end gap-3 sm:px-2 mt-3">
+      <button
+        class="btn-medium blueish !w-full sm:!w-auto"
+        @click.prevent="changePassword"
+      >
+        Change
       </button>
     </div>
   </form>
@@ -169,97 +140,4 @@
       <Loading />
     </div>
   </div>
-
-  <div v-if="cd">
-    <div
-      class="fixed top-0 left-0 bg-black/30 backdrop-blur-sm w-full h-full z-40"
-      @click="changeCd"
-    ></div>
-    <ConfirmationDialog
-      title="Remove Account"
-      text="Are you sure you want to proceed?"
-      @accept="removeUser"
-      @cancel="changeCd"
-    />
-  </div>
 </template>
-
-<script setup>
-import { computed, ref } from 'vue'
-import { auth, db } from '../firebase'
-import { store } from '../store'
-import Loading from '../components/Loading.vue'
-import ConfirmationDialog from './ConfirmationDialog.vue'
-let error = ref(''),
-  isLoading = ref(false),
-  FN_REGEX = /^[A-Za-z- ]{3,}$/,
-  E_REGEX = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
-  WEBSITE_REGEX = /^((https?|ftp|smtp):\/\/)?(www.)?[a-z0-9]+\.[a-z]+(\/[a-zA-Z0-9#]+\/?)*$/
-
-const props = defineProps({
-  pps: Object,
-})
-
-const data = ref(props.pps)
-const cd = ref(false)
-
-const user = computed(() => {
-  return store.state.user
-})
-
-const updateUser = () => {
-  if (data.value.fullName.match(FN_REGEX)) {
-    error.value = ''
-    if (data.value.email.match(E_REGEX)) {
-      error.value = ''
-      if (
-        data.value.website.match(WEBSITE_REGEX) ||
-        data.value.website === ''
-      ) {
-        error.value = ''
-        go()
-      } else {
-        error.value = 'Website is not valid'
-      }
-    } else {
-      error.value = 'E-mail is not valid'
-    }
-  } else {
-    error.value =
-      'Full Name is not valid \nAtleast three characters (no numbers)'
-  }
-}
-
-const go = () => {
-  isLoading.value = true
-  db.collection('users')
-    .doc(data.value.email)
-    .update({
-      fullName: data.value.fullName,
-      location: data.value.location,
-      website: data.value.website,
-      bio: data.value.bio,
-    })
-    .then(() => {
-      location.reload()
-    })
-    .catch((err) => {
-      console.log(err)
-    })
-}
-
-const removeUser = () => {
-  const user = auth.currentUser
-  isLoading.value = true
-
-  user.delete()
-  db.collection('users').doc(user.email).delete()
-  location.reload()
-}
-
-const changeCd = () => {
-  cd.value = !cd.value
-  if (cd.value) document.body.style.overflow = 'hidden'
-  else document.body.style.overflow = 'auto'
-}
-</script>

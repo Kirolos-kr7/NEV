@@ -12,11 +12,10 @@ export const store = createStore({
   },
   mutations: {
     setUser(state, { user }) {
-      state.user = user
-    },
-    logOut(state) {
-      state.user = null
-      auth.signOut()
+      if (!user) {
+        auth.signOut()
+        state.user = null
+      } else state.user = user
     },
   },
 })

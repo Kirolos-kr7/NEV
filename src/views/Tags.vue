@@ -2,7 +2,7 @@
   <Navbar />
   <div>
     <div
-      class="container mx-auto pt-20 sm:pt-24 flex gap-3 flex-wrap justify-evenly items-start"
+      class="container max-w-[1600px] mx-auto pt-20 sm:pt-24 flex gap-3 flex-wrap justify-evenly items-start"
       v-if="loaded"
     >
       <Sidenav class="hidden lg:block lg:w-2/12" :isHomePage="true" />

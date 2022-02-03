@@ -43,18 +43,7 @@
             <div
               class="img-wrapper w-9 h-9 rounded-full overflow-hidden mr-2 transform -translate-y-2.5 bg-gray-300"
             >
-              <img
-                v-if="comment.byImage"
-                :src="comment.byImage"
-                alt="user picture"
-                class="w-full"
-              />
-              <img
-                v-else
-                src="../assets/anonymous.png"
-                alt="user picture"
-                class="w-full"
-              />
+              <VImage :src="comment.byImage" type="user" />
             </div>
           </router-link>
           <div
@@ -201,6 +190,7 @@ import { store } from '../store'
 import { db, timestamp } from '../firebase'
 import { useRoute } from 'vue-router'
 import { tweakDate } from '../helper'
+import VImage from './VImage.vue'
 
 let comments = ref([]),
   newCommentLoader = ref(false),

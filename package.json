@@ -23,6 +23,7 @@
     "lowlight": "^1.20.0",
     "uuid": "^8.3.2",
     "vue": "^3.2.28",
+    "vue-advanced-cropper": "^2.8.0",
     "vue-router": "^4.0.12",
     "vuex": "^4.0.2"
   },

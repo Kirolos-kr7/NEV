@@ -7,8 +7,8 @@
     <div
       class="react mr-5 mt-5 hidden md:block sticky top-32 bottom-32 transition-all"
     >
-      <div
-        class="icon-wrapper heart cursor-pointer m-4 mb-4 rounded-full hover:bg-red-300 dark:hover:bg-red-800 bg-red-100 dark:bg-red-700 dark:bg-opacity-30 transition-all"
+      <button
+        class="icon-wrapper heart cursor-pointer m-4 mb-4 rounded-full hover:bg-red-300 focus:!bg-red-300 dark:hover:bg-red-800 dark:focus:!bg-red-800 bg-red-100 dark:bg-red-700 dark:bg-opacity-30 transition-all"
         @click="like(post.likes, post.id)"
       >
         <svg
@@ -32,9 +32,9 @@
           v-if="post.likes"
           >{{ post.likes.length !== 0 ? post.likes.length : '' }}</span
         >
-      </div>
-      <div
-        class="icon-wrapper chat cursor-pointer m-4 mb-4 rounded-full bg-green-100 hover:bg-green-300 dark:bg-green-700 dark:hover:bg-green-500 dark:bg-opacity-30 transition-all"
+      </button>
+      <button
+        class="icon-wrapper chat cursor-pointer m-4 mb-4 rounded-full bg-green-100 hover:bg-green-300 focus:!bg-green-300 dark:bg-green-700 dark:hover:bg-green-500 dark:focus:!bg-green-500 dark:bg-opacity-30 transition-all"
         @click="toDiscussion"
       >
         <svg
@@ -51,10 +51,10 @@
             d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
           ></path>
         </svg>
-      </div>
-      <div
+      </button>
+      <button
         @click="shareLink"
-        class="icon-wrapper share cursor-pointer m-4 mb-4 rounded-full bg-indigo-100 hover:bg-indigo-300 dark:bg-indigo-700 dark:hover:bg-indigo-400 dark:bg-opacity-30 transition-all"
+        class="icon-wrapper share cursor-pointer m-4 mb-4 rounded-full bg-indigo-100 hover:bg-indigo-300 focus:!bg-indigo-300 dark:bg-indigo-700 dark:hover:!bg-indigo-400 dark:focus:bg-indigo-400 dark:bg-opacity-30 transition-all"
       >
         <svg
           class="w-6 h-6 m-2 transition-all"
@@ -78,20 +78,17 @@
             👌 Copied To Clipboard
           </div>
         </transition>
-      </div>
+      </button>
     </div>
     <div
       class="post mb-4 w-full bg-white dark:text-white dark:bg-dark3 md:border md:border-gray-200 md:dark:border-dark1 md:border-solid sm:rounded-lg overflow-hidden"
     >
-      <div
-        v-if="post.image || post.image != null"
-        class="h-[300px] sm:rounded-tr-lg sm:rounded-tl-lg overflow-hidden flex items-center bg-gray-50 mb-3"
-        :style="
-          'background: url( ' +
-          post.image +
-          '  ) center center no-repeat; background-size: cover'
-        "
-      ></div>
+      <VImage
+        v-if="post.image"
+        :src="post.image"
+        type="blog"
+        classNames="max-h-pic"
+      />
       <div class="px-3 pb-3 pt-0 sm:px-12">
         <div class="details mt-5 sm:mt-8">
           <h1
@@ -104,24 +101,8 @@
               :to="'/u/' + post.by"
               class="flex items-center text-black dark:text-white no-underline hover:text-gray-500 dark:hover:text-gray-300 transition"
             >
-              <div
-                class="img-wrapper w-9 h-9 rounded-full overflow-hidden relative bg-gray-300"
-              >
-                <img
-                  v-if="post?.byImage"
-                  :src="post.byImage"
-                  alt="user picture"
-                  class="w-full"
-                />
-                <img
-                  v-else
-                  src="../assets/anonymous.png"
-                  alt="user picture"
-                  class="w-full"
-                />
-                <div
-                  class="w-full h-full absolute top-0 hover:bg-gray-500 hover:bg-opacity-20 transition-all z-20"
-                ></div>
+              <div class="img-wrapper w-9 h-9 rounded-full overflow-hidden">
+                <VImage :src="post.byImage" type="user" />
               </div>
               <h4 class="font-semibold ml-3">{{ post.byFullName }}</h4>
             </router-link>
@@ -132,14 +113,25 @@
           </div>
         </div>
 
+        <div class="tags flex gap-2 text-gray-400 text-md mt-2 font-BioRhyme">
+          <router-link
+            v-for="tag in post.tags"
+            :key="tag"
+            :to="`/t/` + tag"
+            class="text-current no-underline hover:bg-gray-100 dark:hover:bg-dark2 px-1.5 py-0.5 rounded-md transition-all"
+          >
+            <div class="tag">{{ `#` + tag }}</div>
+          </router-link>
+        </div>
+
         <PostContent :content="post.content" />
 
         <div
           class="react mr-5 mt-5 md:hidden transition-all flex items-baseline justify-evenly text-black"
         >
           <div class="flex flex-col items-center">
-            <div
-              class="icon-wrapper heart cursor-pointer m-4 mb-4 rounded-full hover:bg-red-300 dark:hover:bg-red-800 bg-red-100 dark:bg-red-700 dark:bg-opacity-30 transition-all"
+            <button
+              class="icon-wrapper heart cursor-pointer m-4 mb-4 rounded-full hover:bg-red-300 focus:!bg-red-300 dark:hover:bg-red-800 dark:focus:!bg-red-800 bg-red-100 dark:bg-red-700 dark:bg-opacity-30 transition-all"
               @click="like(post.likes, post.id)"
             >
               <svg
@@ -158,7 +150,7 @@
                   d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
                 ></path>
               </svg>
-            </div>
+            </button>
             <span
               class="pointer-events-none dark:text-white -mt-2 font-BioRhyme"
               v-if="post.likes.length === 1"
@@ -169,8 +161,8 @@
               >{{ post.likes.length !== 0 ? post.likes.length + ' likes' : '' }}
             </span>
           </div>
-          <div
-            class="icon-wrapper chat cursor-pointer m-4 mb-4 rounded-full bg-green-100 hover:bg-green-300 dark:bg-green-700 dark:hover:bg-green-500 dark:bg-opacity-30 transition-all"
+          <button
+            class="icon-wrapper chat cursor-pointer m-4 mb-4 rounded-full bg-green-100 hover:bg-green-300 focus:!bg-green-300 dark:bg-green-700 dark:hover:bg-green-500 dark:focus:!bg-green-500 dark:bg-opacity-30 transition-all"
             @click="toDiscussion"
           >
             <svg
@@ -187,10 +179,10 @@
                 d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
               ></path>
             </svg>
-          </div>
-          <div
+          </button>
+          <button
             @click="shareLink"
-            class="icon-wrapper share cursor-pointer m-4 mb-4 rounded-full bg-indigo-100 hover:bg-indigo-300 dark:bg-indigo-700 dark:hover:bg-indigo-400 dark:bg-opacity-30 transition-all"
+            class="icon-wrapper share cursor-pointer m-4 mb-4 rounded-full bg-indigo-100 hover:bg-indigo-300 dark:focus:!bg-indigo-300 dark:bg-indigo-700 dark:hover:bg-indigo-400 focus:!bg-indigo-400 dark:bg-opacity-30 transition-all"
           >
             <svg
               class="w-6 h-6 m-2 transition-all"
@@ -214,7 +206,7 @@
                 👌 Copied To Clipboard
               </div>
             </transition>
-          </div>
+          </button>
         </div>
 
         <span class="hl bg-gray-300 dark:bg-dark1"></span>
@@ -235,9 +227,10 @@ import { db } from '../firebase'
 import { tweakDate } from '../helper'
 import Navbar from '../components/Navbar.vue'
 import Comment from '../components/Comment.vue'
-import PostContent from '../components/PostContent.vue'
 import Loading from '../components/Loading.vue'
 import Footer from '../components/Footer.vue'
+import VImage from '../components/VImage.vue'
+import PostContent from '../components/PostContent.vue'
 
 let post = ref({}),
   user = ref(),

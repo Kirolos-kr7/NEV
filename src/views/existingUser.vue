@@ -1,6 +1,6 @@
 <template>
   <Navbar />
-  <div class="register pt-20 sm:pt-24 bg-primary dark:bg-dark1 py-5">
+  <div class="/register pt-20 sm:pt-24 bg-primary dark:bg-dark1 py-5">
     <div
       class="wrapper w-full sm:w-9/12 md:w-8/12 lg:w-6/12 sm:border sm:border-gray-300 sm:dark:border-dark1 sm:border-solid mx-auto p-5 rounded-md overflow-hidden bg-white dark:bg-dark2"
     >
@@ -93,7 +93,7 @@
         >
           Log In
         </button>
-        <router-link to="/u/new">
+        <router-link to="/register">
           <div
             class="box text-center cursor-pointer mt-4 relative inline-block text-black dark:text-white"
           >

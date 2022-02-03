@@ -1,5 +1,4 @@
-@charset "UTF-8";
-@import url('https://fonts.googleapis.com/css2?family=BioRhyme:wght@200;300;400;700;800&family=JetBrains+Mono:wght@400;500;600&family=Roboto:wght@100;300;400;500;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=BioRhyme:wght@200;300;400;700;800&family=JetBrains+Mono:wght@400;500;600&family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -10,7 +9,11 @@ body {
 }
 
 .ProseMirror {
-  @apply prose prose-teal prose-p:!my-2 sm:prose-lg prose-pre:font-JetBrains dark:prose-invert;
+  @apply prose prose-stone prose-p:!my-2 sm:prose-lg prose-code:font-JetBrains prose-code:after:hidden prose-code:before:hidden prose-code:rounded-sm  prose-code:px-1 prose-code:mx-1 dark:prose-invert dark:prose-code:bg-[#121212] prose-code:bg-slate-200;
+}
+
+.ProseMirror pre code {
+  @apply !bg-transparent;
 }
 
 .chip {
@@ -42,11 +45,11 @@ body {
 }
 
 .btn-medium {
-  @apply block w-max  text-center cursor-pointer  items-center no-underline select-none text-indigo-500  hover:bg-gray-100 dark:hover:bg-dark2  font-medium px-3 py-2 rounded-md transition-all focus:outline-none focus:ring focus:ring-indigo-700 focus:ring-opacity-75 font-BioRhyme;
+  @apply block w-max  text-center cursor-pointer  items-center no-underline select-none text-indigo-500  hover:bg-gray-100 dark:hover:bg-dark2  font-medium px-3 py-2 rounded-md transition-all focus:outline-none  font-BioRhyme;
 }
 
 .blueish {
-  @apply text-white bg-indigo-600 hover:bg-indigo-700 dark:hover:bg-indigo-700 focus:bg-indigo-700;
+  @apply text-white bg-indigo-600 hover:bg-indigo-700 dark:hover:bg-indigo-700 focus:bg-indigo-700 focus:ring focus:ring-opacity-75 focus:ring-indigo-700;
 }
 
 .blueish-active {
@@ -54,7 +57,7 @@ body {
 }
 
 .redish {
-  @apply text-white bg-red-600 dark:hover:bg-red-700 focus:bg-red-700 inline-block;
+  @apply text-white bg-red-600 dark:hover:bg-red-700 hover:bg-red-700 focus:bg-red-700 inline-block focus:ring focus:ring-opacity-75 focus:ring-red-700;
 }
 
 ul {
@@ -63,7 +66,8 @@ ul {
 
 input,
 select,
-textarea {
+textarea,
+.imageTrigger {
   @apply focus:outline-none focus:ring focus:ring-indigo-700/75;
 }
 
@@ -71,4 +75,56 @@ router-link,
 a,
 button {
   @apply outline-none focus:outline-none;
+}
+
+.hljs-comment,
+.hljs-quote {
+  color: #616161;
+}
+
+.hljs-variable,
+.hljs-template-variable,
+.hljs-attribute,
+.hljs-tag,
+.hljs-name,
+.hljs-regexp,
+.hljs-link,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class {
+  color: #f98181;
+}
+
+.hljs-number,
+.hljs-meta,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params {
+  color: #fbbc88;
+}
+
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet {
+  color: #b9f18d;
+}
+
+.hljs-title,
+.hljs-section {
+  color: #faf594;
+}
+
+.hljs-keyword,
+.hljs-selector-tag {
+  color: #70cff8;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: 700;
 }

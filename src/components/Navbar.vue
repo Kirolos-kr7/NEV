@@ -59,22 +59,7 @@
           class="profile flex justify-center items-center w-11 h-11 rounded-full overflow-hidden cursor-pointer relative"
           @click.prevent="userMenuActions"
         >
-          <img
-            :src="user.photoURL"
-            alt="profile picture"
-            class="pointer-events-none"
-            width="44"
-            v-if="user.photoURL"
-          />
-          <img
-            src="../assets/anonymous.png"
-            class="w-full bg-gray-300 pointer-events-none"
-            alt="user image"
-            v-else
-          />
-          <div
-            class="w-full h-full absolute hover:bg-gray-500 hover:bg-opacity-20 transition-all z-20 pointer-events-none"
-          ></div>
+          <VImage :src="user.photoURL" type="user" :animate="false" />
         </button>
         <transition
           enter-active-class="animate__animated animate__fadeIn  animate__faster"
@@ -173,12 +158,12 @@
         </transition>
       </li>
     </ul>
-    <ul class="h-full flex justify-center items-center" v-else>
+    <ul class="h-full flex justify-center items-center" v-if="!user">
       <li class="my-auto list-none mx-2">
-        <router-link class="btn-medium" to="/u/exi"> Log In</router-link>
+        <router-link class="btn-medium" to="/login"> Log In</router-link>
       </li>
       <li class="my-auto list-none mx-2 hidden sm:block">
-        <router-link class="btn-medium blueish" to="/u/new">
+        <router-link class="btn-medium blueish" to="/register">
           Create Account</router-link
         >
       </li>
@@ -234,10 +219,11 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { store } from '../store'
 import Sidenav from '../components/Sidenav.vue'
+import VImage from './VImage.vue'
 
 let userMenu = ref(false)
 let ddm = ref(false)
@@ -279,11 +265,8 @@ const user = computed(() => {
   return store.state.user
 })
 
-let router = useRouter()
-
 const logOut = () => {
-  store.commit('logOut')
-  router.push('/')
+  store.commit('setUser', { user: null })
 }
 
 const userMenuActions = (evt) => {
@@ -291,18 +274,27 @@ const userMenuActions = (evt) => {
     userMenu.value = false
   } else {
     userMenu.value = true
-    window.addEventListener(
-      'mouseup',
-      (e) => {
-        if (
-          !document.querySelector('.userMenu')?.contains(e.target) &&
-          !document.querySelector('.profile')?.contains(e.target)
-        ) {
-          userMenu.value = false
-        }
-      },
-      { once: true },
-    )
   }
 }
+
+const handleMenu = (e) => {
+  if (
+    !document.querySelector('.userMenu')?.contains(e.target) &&
+    !document.querySelector('.profile')?.contains(e.target)
+  ) {
+    userMenu.value = false
+  }
+}
+
+watch(userMenu, () => {
+  if (user.value) {
+    window.addEventListener('mouseup', handleMenu, {
+      passive: true,
+    })
+  } else {
+    window.removeEventListener('mouseup', handleMenu, {
+      passive: true,
+    })
+  }
+})
 </script>
