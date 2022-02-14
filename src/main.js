@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router.js'
 import { store } from './store'
 import '../tailwind.css'
+import '../transition.css'
 import 'animate.css/animate.css'
 
 import { registerSW } from 'virtual:pwa-register'

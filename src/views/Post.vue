@@ -1,78 +1,42 @@
 <template>
   <Navbar />
   <div
-    class="lg:container w-full mx-auto md:w-10/12 lg:w-9/12 pt-20 sm:pt-24 flex items-start"
+    class="mx-auto flex w-full items-start pt-20 sm:pt-24 md:w-10/12 lg:container lg:w-9/12"
     v-if="loaded"
   >
     <div
-      class="react mr-5 mt-5 hidden md:block sticky top-32 bottom-32 transition-all"
+      class="react sticky top-32 bottom-32 mr-5 mt-5 hidden transition-all md:block"
     >
       <button
-        class="icon-wrapper heart cursor-pointer m-4 mb-4 rounded-full hover:bg-red-300 focus:!bg-red-300 dark:hover:bg-red-800 dark:focus:!bg-red-800 bg-red-100 dark:bg-red-700 dark:bg-opacity-30 transition-all"
+        class="icon-wrapper heart m-4 mb-4 cursor-pointer rounded-full bg-red-100 transition-all hover:bg-red-300 focus:!bg-red-300 dark:bg-red-700 dark:bg-opacity-30 dark:hover:bg-red-800 dark:focus:!bg-red-800"
         @click="like(post.likes, post.id)"
       >
-        <svg
-          class="w-6 h-6 m-2 transition-all"
+        <HeartIcon
+          class="m-2 h-6 w-6 transition-all"
           :class="likedByUser(post.likes)"
           :id="'l' + post.id"
-          fill="crimson"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-          ></path>
-        </svg>
+        />
         <span
-          class="absolute -right-3.5 pointer-events-none dark:text-white"
+          class="pointer-events-none absolute -right-3.5 dark:text-white"
           v-if="post.likes"
           >{{ post.likes.length !== 0 ? post.likes.length : '' }}</span
         >
       </button>
       <button
-        class="icon-wrapper chat cursor-pointer m-4 mb-4 rounded-full bg-green-100 hover:bg-green-300 focus:!bg-green-300 dark:bg-green-700 dark:hover:bg-green-500 dark:focus:!bg-green-500 dark:bg-opacity-30 transition-all"
+        class="icon-wrapper chat m-4 mb-4 cursor-pointer rounded-full bg-green-100 transition-all hover:bg-green-300 focus:!bg-green-300 dark:bg-green-700 dark:bg-opacity-30 dark:hover:bg-green-500 dark:focus:!bg-green-500"
         @click="toDiscussion"
       >
-        <svg
-          class="w-6 h-6 m-2 transition-all"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
-          ></path>
-        </svg>
+        <AnnotationIcon class="m-2 h-6 w-6 transition-all" />
       </button>
       <button
         @click="shareLink"
-        class="icon-wrapper share cursor-pointer m-4 mb-4 rounded-full bg-indigo-100 hover:bg-indigo-300 focus:!bg-indigo-300 dark:bg-indigo-700 dark:hover:!bg-indigo-400 dark:focus:bg-indigo-400 dark:bg-opacity-30 transition-all"
+        class="icon-wrapper share m-4 mb-4 cursor-pointer rounded-full bg-indigo-100 transition-all hover:bg-indigo-300 focus:!bg-indigo-300 dark:bg-indigo-700 dark:bg-opacity-30 dark:hover:!bg-indigo-400 dark:focus:bg-indigo-400"
       >
-        <svg
-          class="w-6 h-6 m-2 transition-all"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
-          ></path>
-        </svg>
-        <transition name="fadeInOut">
+        <ShareIcon class="m-2 h-6 w-6 transition-all" />
+
+        <transition name="fade">
           <div
-            class="absolute w-max bg-white dark:bg-dark2 z-10 top-14 dark:text-white py-1 px-2 rounded-md pointer-events-none"
+            class="pointer-events-none absolute top-14 z-10 w-max rounded-md bg-white py-1 px-2 dark:bg-dark2 dark:text-white"
             v-if="isCopiedToClipboard"
           >
             👌 Copied To Clipboard
@@ -81,7 +45,7 @@
       </button>
     </div>
     <div
-      class="post mb-4 w-full bg-white dark:text-white dark:bg-dark3 md:border md:border-gray-200 md:dark:border-dark1 md:border-solid sm:rounded-lg overflow-hidden"
+      class="post mb-4 w-full overflow-hidden bg-white dark:bg-dark3 dark:text-white sm:rounded-lg md:border md:border-solid md:border-gray-200 md:dark:border-dark1"
     >
       <VImage
         v-if="post.image"
@@ -92,33 +56,33 @@
       <div class="px-3 pb-3 pt-0 sm:px-12">
         <div class="details mt-5 sm:mt-8">
           <h1
-            class="text-3xl sm:text-5xl sm:leading-title font-semibold mb-4 font-BioRhyme"
+            class="mb-4 font-BioRhyme text-3xl font-semibold sm:text-5xl sm:leading-title"
           >
             {{ post.title }}
           </h1>
           <div class="mt-2 flex items-center font-BioRhyme">
             <router-link
-              :to="'/u/' + post.by"
-              class="flex items-center text-black dark:text-white no-underline hover:text-gray-500 dark:hover:text-gray-300 transition"
+              :to="'/u/' + post.userName"
+              class="flex items-center text-black no-underline transition hover:text-gray-500 dark:text-white dark:hover:text-gray-300"
             >
-              <div class="img-wrapper w-9 h-9 rounded-full overflow-hidden">
-                <VImage :src="post.byImage" type="user" />
+              <div class="img-wrapper h-9 w-9 overflow-hidden rounded-full">
+                <VImage :src="post.userImage" type="user" />
               </div>
-              <h4 class="font-semibold ml-3">{{ post.byFullName }}</h4>
+              <h4 class="ml-3 font-semibold">{{ post.userFullName }}</h4>
             </router-link>
-            <div class="dot w-1 h-1 bg-gray-400 rounded-full mx-2 mt-1"></div>
-            <p class="text-gray-500 mt-0.5 text-xs">
+            <div class="dot mx-2 mt-1 h-1 w-1 rounded-full bg-gray-400"></div>
+            <p class="mt-0.5 text-xs text-gray-500">
               {{ tweakDate(post.createdAt) }}
             </p>
           </div>
         </div>
 
-        <div class="tags flex gap-2 text-gray-400 text-md mt-2 font-BioRhyme">
+        <div class="tags text-md mt-2 flex gap-2 font-BioRhyme text-gray-400">
           <router-link
             v-for="tag in post.tags"
             :key="tag"
             :to="`/t/` + tag"
-            class="text-current no-underline hover:bg-gray-100 dark:hover:bg-dark2 px-1.5 py-0.5 rounded-md transition-all"
+            class="rounded-md px-1.5 py-0.5 text-current no-underline transition-all hover:bg-gray-100 dark:hover:bg-dark2"
           >
             <div class="tag">{{ `#` + tag }}</div>
           </router-link>
@@ -127,17 +91,15 @@
         <PostContent :content="post.content" />
 
         <div
-          class="react mr-5 mt-5 md:hidden transition-all flex items-baseline justify-evenly text-black"
+          class="react mr-5 mt-5 flex items-baseline justify-evenly text-black transition-all md:hidden"
         >
           <div class="flex flex-col items-center">
             <button
-              class="icon-wrapper heart cursor-pointer m-4 mb-4 rounded-full hover:bg-red-300 focus:!bg-red-300 dark:hover:bg-red-800 dark:focus:!bg-red-800 bg-red-100 dark:bg-red-700 dark:bg-opacity-30 transition-all"
+              class="icon-wrapper heart m-4 mb-4 cursor-pointer rounded-full bg-red-100 transition-all hover:bg-red-300 focus:!bg-red-300 dark:bg-red-700 dark:bg-opacity-30 dark:hover:bg-red-800 dark:focus:!bg-red-800"
               @click="like(post.likes, post.id)"
             >
-              <svg
-                class="w-6 h-6 m-2 transition-all"
-                :class="likedByUser(post.likes)"
-                :id="'l' + post.id"
+              <!-- <svg
+                
                 fill="crimson"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -149,58 +111,38 @@
                   stroke-width="2"
                   d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
                 ></path>
-              </svg>
+              </svg> -->
+              <HeartIcon
+                class="m-2 h-6 w-6 transition-all"
+                :class="likedByUser(post.likes)"
+                :id="'l' + post.id"
+              />
             </button>
             <span
-              class="pointer-events-none dark:text-white -mt-2 font-BioRhyme"
+              class="pointer-events-none -mt-2 font-BioRhyme dark:text-white"
               v-if="post.likes.length === 1"
               >{{ post.likes.length + ' like' }} </span
             ><span
-              class="pointer-events-none dark:text-white -mt-2 font-BioRhyme"
+              class="pointer-events-none -mt-2 font-BioRhyme dark:text-white"
               v-else-if="post.likes"
               >{{ post.likes.length !== 0 ? post.likes.length + ' likes' : '' }}
             </span>
           </div>
           <button
-            class="icon-wrapper chat cursor-pointer m-4 mb-4 rounded-full bg-green-100 hover:bg-green-300 focus:!bg-green-300 dark:bg-green-700 dark:hover:bg-green-500 dark:focus:!bg-green-500 dark:bg-opacity-30 transition-all"
+            class="icon-wrapper chat m-4 mb-4 cursor-pointer rounded-full bg-green-100 transition-all hover:bg-green-300 focus:!bg-green-300 dark:bg-green-700 dark:bg-opacity-30 dark:hover:bg-green-500 dark:focus:!bg-green-500"
             @click="toDiscussion"
           >
-            <svg
-              class="w-6 h-6 m-2 transition-all"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
-              ></path>
-            </svg>
+            <AnnotationIcon class="m-2 h-6 w-6 transition-all" />
           </button>
           <button
             @click="shareLink"
-            class="icon-wrapper share cursor-pointer m-4 mb-4 rounded-full bg-indigo-100 hover:bg-indigo-300 dark:focus:!bg-indigo-300 dark:bg-indigo-700 dark:hover:bg-indigo-400 focus:!bg-indigo-400 dark:bg-opacity-30 transition-all"
+            class="icon-wrapper share m-4 mb-4 cursor-pointer rounded-full bg-indigo-100 transition-all hover:bg-indigo-300 focus:!bg-indigo-400 dark:bg-indigo-700 dark:bg-opacity-30 dark:hover:bg-indigo-400 dark:focus:!bg-indigo-300"
           >
-            <svg
-              class="w-6 h-6 m-2 transition-all"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
-              ></path>
-            </svg>
-            <transition name="fadeInOut">
+            <ShareIcon class="m-2 h-6 w-6 transition-all" />
+
+            <transition name="fade">
               <div
-                class="absolute w-max bg-white dark:bg-dark2 z-10 bottom-14 dark:text-white py-1 px-2 rounded-md pointer-events-none"
+                class="pointer-events-none absolute bottom-14 z-10 w-max rounded-md bg-white py-1 px-2 dark:bg-dark2 dark:text-white"
                 v-if="isCopiedToClipboard"
               >
                 👌 Copied To Clipboard
@@ -231,6 +173,7 @@ import Loading from '../components/Loading.vue'
 import Footer from '../components/Footer.vue'
 import VImage from '../components/VImage.vue'
 import PostContent from '../components/PostContent.vue'
+import { HeartIcon, AnnotationIcon, ShareIcon } from '@heroicons/vue/outline'
 
 let post = ref({}),
   user = ref(),
@@ -310,7 +253,7 @@ const shareLink = () => {
 }
 </script>
 
-<style scoped>
+<style>
 .hl {
   width: 100%;
   height: 1px;
@@ -338,9 +281,10 @@ const shareLink = () => {
   flex-direction: column-reverse;
 }
 
-svg path {
+.icon-wrapper svg path {
   fill: #9ca3af3d;
 }
+
 .heart:hover path {
   fill: #ff0030;
 }
@@ -353,15 +297,5 @@ svg path {
 
 .isLiked path {
   fill: crimson;
-}
-
-.fadeInOut-enter-active,
-.fadeInOut-leave-active {
-  transition: opacity 0.2s ease;
-}
-
-.fadeInOut-enter-from,
-.fadeInOut-leave-to {
-  opacity: 0;
 }
 </style>

@@ -1,22 +1,22 @@
 <template>
   <div class="discussion mt-5" :class="!comments.length > 0 ? 'mb-6' : 'mb-2'">
-    <h2 class="text-2xl font-extrabold font-BioRhyme">
+    <h2 class="font-BioRhyme text-2xl font-extrabold">
       Discussion {{ comments.length > 0 ? '(' + comments.length + ')' : ' ' }}
     </h2>
-    <div class="comment-area text-right w-11/12 mx-auto mt-6 sm:mt-8">
+    <div class="comment-area mx-auto mt-6 w-11/12 text-right sm:mt-8">
       <textarea
-        class="commentArea mb-0 w-full h-40 p-2 text-lg rounded-md mx-auto block resize-none textarea border-gray-400 dark:border-dark1 border-solid border bg-gray-100 dark:bg-dark4 dark:text-white outline-none"
+        class="commentArea textarea mx-auto mb-0 block h-40 w-full resize-none rounded-md border border-solid border-gray-400 bg-gray-100 p-2 text-lg outline-none dark:border-dark1 dark:bg-dark4 dark:text-white"
         placeholder="Join the discussion"
         v-model="commentText"
       ></textarea>
       <button
-        class="newCommentBtn overflow-hidden bg-green-500 mt-4 hover:bg-green-400 relative inline-block transition mr-auto text-sm font-semibold border-none text-white px-4 py-2 cursor-pointer"
+        class="newCommentBtn relative mt-4 mr-auto inline-block cursor-pointer overflow-hidden border-none bg-green-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-green-400"
         @click="postNewComment"
         v-if="commentText !== ''"
       >
-        Add Comment<span class="tracking-normal whitespace-pre"> -></span>
+        Add Comment<span class="whitespace-pre tracking-normal"> -></span>
         <div
-          class="loader w-full h-full absolute top-0 left-0 z-10 flex justify-center items-center bg-green-400 cursor-default"
+          class="loader absolute top-0 left-0 z-10 flex h-full w-full cursor-default items-center justify-center bg-green-400"
           v-if="newCommentLoader"
         >
           <img
@@ -28,7 +28,7 @@
         </div>
       </button>
     </div>
-    <div class="comments w-11/12 mx-auto">
+    <div class="comments mx-auto w-11/12">
       <div
         class="comment-wrapper"
         v-for="comment in comments"
@@ -37,65 +37,65 @@
       >
         <div class="flex">
           <router-link
-            :to="'/u/' + comment.by"
+            :to="'/u/' + comment.userName"
             class="flex items-center text-black no-underline"
           >
             <div
-              class="img-wrapper w-9 h-9 rounded-full overflow-hidden mr-2 transform -translate-y-2.5 bg-gray-300"
+              class="img-wrapper mr-2 h-9 w-9 -translate-y-2.5 transform overflow-hidden rounded-full"
             >
-              <VImage :src="comment.byImage" type="user" />
+              <VImage :src="comment.userImage" type="user" />
             </div>
           </router-link>
           <div
-            class="comment w-full border border-solid py-6 px-4 mt-5 dark:bg-dark2 border-gray-200 dark:border-dark1 rounded-md transition-all"
+            class="comment mt-5 w-full rounded-md border border-solid border-gray-200 py-6 px-4 transition-all dark:border-dark1 dark:bg-dark2"
           >
-            <div class="flex items-center justify-between mb-2">
+            <div class="mb-2 flex items-center justify-between">
               <div
-                class="flex sm:items-center flex-col sm:flex-row font-BioRhyme"
+                class="flex flex-col font-BioRhyme sm:flex-row sm:items-center"
               >
                 <router-link
-                  :to="'/u/' + comment.by"
-                  class="text-black no-underline font-medium hover:text-gray-500 transition"
+                  :to="'/u/' + comment.userName"
+                  class="font-medium text-black no-underline transition hover:text-gray-500"
                 >
                   <h4 class="font-semibold dark:text-white">
-                    {{ comment.byFullName }}
+                    {{ comment.userFullName }}
                   </h4>
                 </router-link>
                 <div
-                  class="dot w-1 h-1 bg-gray-400 rounded-full mx-2 mt-1 hidden sm:block"
+                  class="dot mx-2 mt-1 hidden h-1 w-1 rounded-full bg-gray-400 sm:block"
                 ></div>
-                <span class="dark:text-gray-400 text-sm pt-0.5"
+                <span class="pt-0.5 text-sm dark:text-gray-400"
                   >{{ tweakDate(comment.createdAt) }}
                 </span>
               </div>
               <div
-                class="flex cursor-pointer px-1 py-3 rounded-md hover:bg-gray-100 dark:hover:bg-dark1 transition-all relative"
-                v-if="user?.displayName === comment.by"
+                class="relative flex cursor-pointer rounded-md px-1 py-3 transition-all hover:bg-gray-100 dark:hover:bg-dark1"
+                v-if="user?.displayName === comment.userName"
                 @click="commentActions(comment.id)"
               >
                 <span
-                  class="w-1 h-1 m-0.5 bg-gray-400 block rounded-full"
+                  class="m-0.5 block h-1 w-1 rounded-full bg-gray-400"
                 ></span>
                 <span
-                  class="w-1 h-1 m-0.5 bg-gray-400 block rounded-full"
+                  class="m-0.5 block h-1 w-1 rounded-full bg-gray-400"
                 ></span>
                 <span
-                  class="w-1 h-1 m-0.5 bg-gray-400 block rounded-full"
+                  class="m-0.5 block h-1 w-1 rounded-full bg-gray-400"
                 ></span>
                 <div
-                  class="mnu absolute top-[35px] right-0 border-solid rounded-md border-4 dark:border-black w-48 hidden"
+                  class="mnu absolute top-[35px] right-0 hidden w-48 rounded-md border-4 border-solid dark:border-black"
                   :id="comment.id"
                   style="box-shadow: 3px 3px #000"
                 >
                   <ul class="list-none p-0">
                     <li
-                      class="bg-white dark:bg-dark2 hover:bg-gray-100 dark:hover:bg-dark1 transition-all px-4 py-2"
+                      class="bg-white px-4 py-2 transition-all hover:bg-gray-100 dark:bg-dark2 dark:hover:bg-dark1"
                       @click="editComment(comment)"
                     >
                       Edit
                     </li>
                     <li
-                      class="bg-white dark:bg-dark2 hover:bg-gray-100 dark:hover:bg-dark1 transition-all px-4 py-2"
+                      class="bg-white px-4 py-2 transition-all hover:bg-gray-100 dark:bg-dark2 dark:hover:bg-dark1"
                       @click="removeComment(comment)"
                     >
                       Remove
@@ -104,7 +104,7 @@
                 </div>
               </div>
             </div>
-            <p class="text-xl whitespace-pre-line">
+            <p class="whitespace-pre-line text-xl">
               {{ comment.val }}
             </p>
           </div>
@@ -115,7 +115,7 @@
           @click="like(comment.likes, comment.id)"
         >
           <svg
-            class="w-6 h-6 transition-all text-black -ml-0.5"
+            class="-ml-0.5 h-6 w-6 text-black transition-all"
             :class="likedByUser(comment.likes)"
             :id="'l' + comment.id"
             fill="#9ca3af3d"
@@ -132,7 +132,7 @@
           </svg>
 
           <span
-            class="ml-1 whitespace-pre text-gray-600 dark:text-gray-200 select-none"
+            class="ml-1 select-none whitespace-pre text-gray-600 dark:text-gray-200"
             style="line-height: 22px"
             >{{ comment.likes?.length }} likes</span
           >
@@ -141,20 +141,20 @@
     </div>
   </div>
   <div
-    class="edit fixed w-full h-screen top-0 left-0 flex justify-center items-center overflow-hidden z-50"
+    class="edit fixed top-0 left-0 z-50 flex h-screen w-full items-center justify-center overflow-hidden"
     v-if="commentToEdit.dialog"
   >
-    <div class="bgBlur absolute bg-black bg-opacity-50 w-full h-full z-0"></div>
+    <div class="bgBlur absolute z-0 h-full w-full bg-black bg-opacity-50"></div>
     <div
-      class="textAreaWrapper bg-white dark:bg-dark2 z-10 w-11/12 max-w-prose rounded-md p-9 pt-5"
+      class="textAreaWrapper z-10 w-11/12 max-w-prose rounded-md bg-white p-9 pt-5 dark:bg-dark2"
     >
-      <div class="flex justify-between items-center mb-5">
+      <div class="mb-5 flex items-center justify-between">
         <h2>Edit Comment</h2>
         <span
-          class="cursor-pointer p-1 pb-0 dark:hover:bg-dark1 rounded-md"
+          class="cursor-pointer rounded-md p-1 pb-0 dark:hover:bg-dark1"
           @click="commentToEdit.dialog = false"
           ><svg
-            class="w-6 h-6"
+            class="h-6 w-6"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -165,20 +165,21 @@
               stroke-linejoin="round"
               stroke-width="2"
               d="M6 18L18 6M6 6l12 12"
-            ></path></svg
-        ></span>
+            ></path>
+          </svg>
+        </span>
       </div>
       <textarea
-        class="w-full mb-0 h-40 p-2 text-lg rounded-md mx-auto block resize-none textarea border-gray-400 dark:border-dark1 border-solid border bg-gray-100 dark:bg-dark4 dark:text-white outline-none"
+        class="textarea mx-auto mb-0 block h-40 w-full resize-none rounded-md border border-solid border-gray-400 bg-gray-100 p-2 text-lg outline-none dark:border-dark1 dark:bg-dark4 dark:text-white"
         placeholder="Comment Edit"
         v-model="commentToEdit.commentEditValue"
       ></textarea>
       <div
-        class="btn bg-green-500 mt-4 hover:bg-green-400 transition ml-auto table text-sm font-semibold border-none text-white px-4 py-2 cursor-pointer"
+        class="btn mt-4 ml-auto table cursor-pointer border-none bg-green-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-green-400"
         @click="performEdit"
         v-if="commentToEdit.commentEditValue !== ''"
       >
-        Edit Comment<span class="tracking-normal whitespace-pre"> -></span>
+        Edit Comment<span class="whitespace-pre tracking-normal"> -></span>
       </div>
     </div>
   </div>
@@ -229,7 +230,7 @@ const postNewComment = () => {
   newCommentLoader.value = true
   document.querySelector('.newCommentBtn').disabled = true
   let userData = {}
-  let moreAboutUser = db.collection('users').doc(user.value.email).get()
+  let moreAboutUser = db.collection('users').doc(user.value.displayName).get()
   moreAboutUser
     .then((res) => {
       userData = res.data()
@@ -237,9 +238,9 @@ const postNewComment = () => {
         .add({
           val: commentText.value,
           slug: store.state.postSlug,
-          by: user.value.displayName,
-          byImage: user.value.photoURL,
-          byFullName: userData.fullName,
+          userName: user.value.displayName,
+          userImage: user.value.photoURL,
+          userFullName: userData.fullName,
           createdAt: timestamp(),
           likes: [],
           likes_count: 0,

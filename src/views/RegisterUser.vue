@@ -1,11 +1,13 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { auth, db } from '../firebase'
+import { auth, db, storage } from '../firebase'
 import Navbar from '../components/Navbar.vue'
 import Footer from '../components/Footer.vue'
+import Loading from '../components/Loading.vue'
 
-let username = ref(''),
+let isLoading = ref(false),
+  username = ref(''),
   fullName = ref(''),
   website = ref(''),
   email = ref(''),
@@ -17,7 +19,8 @@ let username = ref(''),
   UN_REGEX = /^[a-z0-9-_]{3,}$/,
   E_REGEX = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
   PW_REGEX = /^[A-Za-z0-9]\w{7,}$/,
-  WEBSITE_REGEX = /^((https?|ftp|smtp):\/\/)?(www.)?[a-z0-9]+\.[a-z]+(\/[a-zA-Z0-9#]+\/?)*$/,
+  WEBSITE_REGEX =
+    /^((https?|ftp|smtp):\/\/)?(www.)?[a-z0-9]+\.[a-z]+(\/[a-zA-Z0-9#]+\/?)*$/,
   countries = ref([
     { name: 'Algeria', code: 'DZ' },
     { name: 'Egypt', code: 'EG' },
@@ -28,110 +31,125 @@ let username = ref(''),
     { name: 'United States', code: 'US' },
   ])
 
-const createUserWithEmailAndPassword = () => {
-  if (fullName.value.match(FN_REGEX)) {
-    error.value = ''
-    if (username.value.match(UN_REGEX)) {
-      error.value = ''
-      if (website.value.match(WEBSITE_REGEX) || website.value === '') {
-        error.value = ''
-        if (email.value.match(E_REGEX)) {
-          error.value = ''
-          if (password.value.match(PW_REGEX)) {
-            error.value = ''
-            go()
-          } else {
-            error.value = 'Password is not valid (minimum 7 characters)'
-          }
-        } else {
-          error.value = 'E-mail is not valid'
-        }
-      } else {
-        error.value = 'Website is not valid'
-      }
-    } else {
-      error.value =
-        'Username is not valid \nAtleast three characters (small, numbers, -, _)'
-    }
-  } else {
+const validateFields = () => {
+  let isValid = true
+  if (!fullName.value.match(FN_REGEX)) {
     error.value =
       'Full Name is not valid \nAtleast three characters (no numbers)'
-  }
+    isValid = false
+  } else if (!username.value.match(UN_REGEX)) {
+    error.value =
+      'Username is not valid \nAtleast three characters (small, numbers, -, _)'
+    isValid = false
+  } else if (!website.value.match(WEBSITE_REGEX) && !website.value === '') {
+    error.value = 'Website is not valid'
+    isValid = false
+  } else if (!email.value.match(E_REGEX)) {
+    error.value = 'E-mail is not valid'
+    isValid = false
+  } else if (!password.value.match(PW_REGEX)) {
+    error.value = 'Password is not valid (minimum 7 characters)'
+    isValid = false
+  } else error.value = ''
+
+  return isValid
 }
 
-const go = () => {
-  auth
-    .createUserWithEmailAndPassword(email.value, password.value)
-    .then((userCredential) => {
-      let user = userCredential.user
+const registerUser = async () => {
+  let isvalid = validateFields()
+  if (!isvalid) return
 
-      user
-        .updateProfile({
-          displayName: username.value.toLowerCase(),
-        })
-        .then(() => {
-          db.collection('users').doc(email.value.toLowerCase()).set({
-            fullName: fullName.value,
-            username: username.value.toLowerCase(),
-            joinDate: new Date().toDateString(),
-            email: email.value.toLowerCase(),
-            location: location.value,
-            website: website.value,
-            bio: null,
-            image: null,
-          })
-          username.value = ''
-          email.value = ''
-          password.value = ''
-          error.value = ''
-          router.push('/')
-        })
+  const dbRef = db.collection('users').doc(username.value.toLowerCase())
+  const userExists = await dbRef.get()
+  if (userExists.exists) {
+    error.value = 'Username already in use'
+    return
+  } else error.value = ''
+
+  isLoading.value = true
+
+  let URL = null
+  let USER = null
+  let stRef = storage.ref('users/' + username.value.toLowerCase() + '.jpeg')
+
+  await auth
+    .createUserWithEmailAndPassword(email.value.toLowerCase(), password.value)
+    .then((userCredential) => {
+      USER = userCredential.user
     })
     .catch((err) => {
       err.code === 'auth/email-already-in-use'
         ? (error.value = 'Email already in use')
         : (error.value = err.code)
     })
+
+  await stRef.put(null)
+  await stRef.getDownloadURL().then((url) => (URL = url))
+
+  await USER.updateProfile({
+    displayName: username.value.toLowerCase(),
+    photoURL: URL,
+  })
+
+  await dbRef
+    .set({
+      fullName: fullName.value,
+      username: username.value.toLowerCase(),
+      joinDate: new Date().toDateString(),
+      email: email.value.toLowerCase(),
+      location: location.value,
+      website: website.value,
+      bio: null,
+      image: URL,
+    })
+    .then(() => {
+      username.value = ''
+      email.value = ''
+      password.value = ''
+      error.value = ''
+      isLoading.value = false
+      router.push('/')
+    })
 }
 </script>
 
 <template>
   <Navbar />
-  <div class="/register pt-20 sm:pt-24 bg-primary dark:bg-dark1 py-5">
+  <div class="/register bg-primary py-5 pt-20 dark:bg-dark1 sm:pt-24">
     <div
-      class="wrapper w-full sm:w-9/12 md:w-8/12 lg:w-6/12 sm:border sm:border-gray-300 sm:dark:border-dark1 sm:border-solid mx-auto p-5 rounded-md overflow-hidden bg-white dark:bg-dark2"
+      class="wrapper mx-auto w-full overflow-hidden rounded-md bg-white p-5 dark:bg-dark2 sm:w-9/12 sm:border sm:border-solid sm:border-gray-300 sm:dark:border-dark1 md:w-8/12 lg:w-6/12"
     >
       <h2
-        class="bg-gray-200 dark:bg-dark3 dark:text-white p-5 -m-5 mb-3 text-center text-2xl font-black font-BioRhyme"
+        class="-m-5 mb-3 bg-gray-200 p-5 text-center font-BioRhyme text-2xl font-black dark:bg-dark3 dark:text-white"
       >
         Join Our Community
       </h2>
-      <p class="font-medium text-center my-5 dark:text-white font-BioRhyme">
+      <p class="my-5 text-center font-BioRhyme font-medium dark:text-white">
         Over <span class="text-xl font-bold">365,326</span> brillinat developers
         and designers
       </p>
       <div class="px-6">
         <form class="flex flex-wrap">
           <div class="input-wrapper w-full sm:w-1/2 sm:px-2">
-            <h3 class="font-medium text-gray-800 dark:text-gray-300 text-base">
+            <h3 class="text-base font-medium text-gray-800 dark:text-gray-300">
               Full Name
             </h3>
             <input
               type="text"
               v-model="fullName"
-              class="w-full px-3 mt-1 mb-6 h-10 border border-solid dark:text-white bg-gray-50 dark:bg-dark4 border-gray-300 dark:border-dark1 rounded-lg text-lg"
+              class="mt-1 mb-6 h-10 w-full rounded-lg border border-solid border-gray-300 bg-gray-50 px-3 text-lg dark:border-dark1 dark:bg-dark4 dark:text-white"
               autocomplete="on"
               required
             />
           </div>
           <div class="input-wrapper w-full sm:w-1/2 sm:px-2">
-            <h3 class="font-medium text-gray-800 dark:text-gray-300 text-base">
+            <h3 class="text-base font-medium text-gray-800 dark:text-gray-300">
               Username
             </h3>
             <input
               type="text"
               v-model="username"
-              class="w-full px-3 mt-1 mb-6 h-10 border border-solid dark:text-gray-300 bg-gray-50 dark:bg-dark4 border-gray-300 dark:border-dark1 rounded-lg text-lg"
+              class="mt-1 mb-6 h-10 w-full rounded-lg border border-solid border-gray-300 bg-gray-50 px-3 text-lg dark:border-dark1 dark:bg-dark4 dark:text-gray-300"
               autocomplete="on"
               required
             />
@@ -139,12 +157,12 @@ const go = () => {
           <div
             class="input-wrapper location-wrapper relative w-full sm:w-1/2 sm:px-2"
           >
-            <h3 class="font-medium text-gray-800 dark:text-gray-300 text-base">
+            <h3 class="text-base font-medium text-gray-800 dark:text-gray-300">
               Location
             </h3>
             <select
               name="location"
-              class="location w-full appearance-none cursor-pointer px-3 mt-1 mb-6 h-10 border border-solid dark:text-gray-300 bg-gray-50 dark:bg-dark4 border-gray-300 dark:border-dark1 rounded-lg text-lg truncate"
+              class="location mt-1 mb-6 h-10 w-full cursor-pointer appearance-none truncate rounded-lg border border-solid border-gray-300 bg-gray-50 px-3 text-lg dark:border-dark1 dark:bg-dark4 dark:text-gray-300"
               v-model="location"
               required
             >
@@ -158,7 +176,7 @@ const go = () => {
               </option>
             </select>
             <svg
-              class="w-6 h-6 absolute top-9 right-5 pointer-events-none chev-down dark:text-white"
+              class="chev-down pointer-events-none absolute top-9 right-5 h-6 w-6 dark:text-white"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -175,42 +193,42 @@ const go = () => {
           </div>
 
           <div class="input-wrapper relative w-full sm:w-1/2 sm:px-2">
-            <h3 class="font-medium text-gray-800 dark:text-gray-300 text-base">
+            <h3 class="text-base font-medium text-gray-800 dark:text-gray-300">
               Website (Optional)
             </h3>
             <input
               type="text"
               v-model="website"
-              class="w-full px-3 mt-1 mb-6 h-10 border border-solid dark:text-gray-300 bg-gray-50 dark:bg-dark4 border-gray-300 dark:border-dark1 rounded-lg text-lg"
+              class="mt-1 mb-6 h-10 w-full rounded-lg border border-solid border-gray-300 bg-gray-50 px-3 text-lg dark:border-dark1 dark:bg-dark4 dark:text-gray-300"
               autocomplete="on"
               required
             />
           </div>
           <div class="input-wrapper relative w-full sm:w-1/2 sm:px-2">
-            <h3 class="font-medium text-gray-800 dark:text-gray-300 text-base">
+            <h3 class="text-base font-medium text-gray-800 dark:text-gray-300">
               E-mail
             </h3>
             <input
               type="text"
               v-model="email"
-              class="w-full px-3 mt-1 mb-6 h-10 border border-solid dark:text-gray-300 bg-gray-50 dark:bg-dark4 border-gray-300 dark:border-dark1 rounded-lg text-lg"
+              class="mt-1 mb-6 h-10 w-full rounded-lg border border-solid border-gray-300 bg-gray-50 px-3 text-lg dark:border-dark1 dark:bg-dark4 dark:text-gray-300"
               required
             />
           </div>
           <div class="input-wrapper w-full sm:w-1/2 sm:px-2">
-            <h3 class="font-medium text-gray-800 dark:text-gray-300 text-base">
+            <h3 class="text-base font-medium text-gray-800 dark:text-gray-300">
               Password
             </h3>
             <input
               type="password"
               v-model="password"
-              class="w-full px-3 mt-1 mb-6 h-10 border border-solid dark:text-gray-300 bg-gray-50 dark:bg-dark4 border-gray-300 dark:border-dark1 rounded-lg text-lg"
+              class="mt-1 mb-6 h-10 w-full rounded-lg border border-solid border-gray-300 bg-gray-50 px-3 text-lg dark:border-dark1 dark:bg-dark4 dark:text-gray-300"
               required
             />
           </div>
         </form>
         <div
-          class="err flex items-center text-white bg-red-100 dark:bg-red-900 mb-6 pl-3 border border-red-300 dark:border-dark1 border-solid p-2 mx-2 rounded-lg transition-all"
+          class="err mb-6 flex items-center rounded-lg border border-solid border-red-300 bg-red-100 p-2 pl-3 text-white transition-all dark:border-dark1 dark:bg-red-900 sm:mx-2"
           v-if="error"
         >
           <svg
@@ -272,13 +290,13 @@ const go = () => {
         <div class="mx-2">
           <button
             class="btn-medium blueish w-max"
-            @click.prevent="createUserWithEmailAndPassword"
+            @click.prevent="registerUser"
           >
             Sign Up
           </button>
           <router-link to="/login">
             <div
-              class="box text-center cursor-pointer mt-4 relative inline-block text-black dark:text-white"
+              class="box relative mt-4 inline-block cursor-pointer text-center text-black dark:text-white"
             >
               Already Have an Account ?
               <div class="lined transition-all dark:bg-gray-300"></div>
@@ -289,4 +307,11 @@ const go = () => {
     </div>
   </div>
   <Footer />
+
+  <div
+    v-if="isLoading"
+    class="fixed top-0 left-0 z-50 h-full w-full bg-black/40 backdrop-blur-sm"
+  >
+    <Loading />
+  </div>
 </template>

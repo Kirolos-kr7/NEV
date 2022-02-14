@@ -2,7 +2,7 @@
   <Navbar />
   <div class="">
     <div
-      class="w-full min-h-screen sm:w-8/12 pt-20 sm:pt-24 bg-white dark:bg-dark2 p-5 mx-auto relative pb-18"
+      class="relative mx-auto min-h-screen w-full bg-white p-5 pt-20 pb-18 dark:bg-dark2 sm:w-8/12 sm:pt-24"
     >
       <div v-if="editor" class="flex flex-wrap">
         <div
@@ -413,13 +413,13 @@
       <div class="editingSpace mx-2">
         <span
           type="text"
-          class="postTitle dark:text-white w-full border-none outline-none font-black text-5xl cursor-text resize-none leading-normal block"
+          class="postTitle block w-full cursor-text resize-none border-none text-5xl font-black leading-normal outline-none dark:text-white"
           contenteditable
         ></span>
         <editor-content :editor="editor" class="mt-5 dark:text-white" />
       </div>
       <button
-        class="btn-medium text-black mt-3 ml-auto absolute bottom-3 right-6"
+        class="btn-medium absolute bottom-3 right-6 mt-3 ml-auto text-black"
         @click.prevent="nextStep.dialog = true"
       >
         Next Step
@@ -428,20 +428,20 @@
   </div>
 
   <div
-    class="edit fixed w-full h-screen top-0 left-0 flex justify-center items-center overflow-hidden z-50"
+    class="edit fixed top-0 left-0 z-50 flex h-screen w-full items-center justify-center overflow-hidden"
     v-if="nextStep.dialog"
   >
-    <div class="bgBlur absolute bg-black bg-opacity-50 w-full h-full z-0"></div>
+    <div class="bgBlur absolute z-0 h-full w-full bg-black bg-opacity-50"></div>
     <div
-      class="wrapper bg-white dark:bg-dark2 z-10 w-11/12 max-w-prose !max-h-[80vh] overflow-y-auto rounded-md p-5 sm:p-7 pt-4 pb-4"
+      class="wrapper z-10 !max-h-[80vh] w-11/12 max-w-prose overflow-y-auto rounded-md bg-white p-5 pt-4 pb-4 dark:bg-dark2 sm:p-7"
     >
-      <div class="flex justify-between items-center mb-5">
-        <h2 class="dark:text-white font-BioRhyme font-normal text-xl">
+      <div class="mb-5 flex items-center justify-between">
+        <h2 class="font-BioRhyme text-xl font-normal dark:text-white">
           Final Touches
           <Colors />
         </h2>
         <button
-          class="w-8 h-8 felx items-center justify-center cursor-pointer p-1 pb-0 dark:hover:bg-dark1 hover:bg-gray-100 dark:text-white rounded-md focus:ring-2 ring-indigo-700/75 transition"
+          class="felx h-8 w-8 cursor-pointer items-center justify-center rounded-md p-1 pb-0 ring-indigo-700/75 transition hover:bg-gray-100 focus:ring-2 dark:text-white dark:hover:bg-dark1"
           @click="nextStep.dialog = false"
         >
           <svg
@@ -463,12 +463,12 @@
       <div>
         <label
           for="ta"
-          class="text-lg dark:text-white font-medium mb-1 block font-BioRhyme"
+          class="mb-1 block font-BioRhyme text-lg font-medium dark:text-white"
           >Short Description
-          <span class="text-specialGray text-xs">[optional]</span></label
+          <span class="text-xs text-specialGray">[optional]</span></label
         >
         <textarea
-          class="w-full h-28 p-2 text-lg rounded-md mx-auto block resize-none textarea border-gray-400 dark:border-dark1 border-solid border bg-gray-100 dark:bg-dark4 dark:text-white mb-3"
+          class="textarea mx-auto mb-3 block h-28 w-full resize-none rounded-md border border-solid border-gray-400 bg-gray-100 p-2 text-lg dark:border-dark1 dark:bg-dark4 dark:text-white"
           placeholder="Short Description"
           v-model="description"
           id="ta"
@@ -477,9 +477,9 @@
       <div>
         <label
           for="postImage"
-          class="text-lg dark:text-white font-medium mb-1 block font-BioRhyme"
+          class="mb-1 block font-BioRhyme text-lg font-medium dark:text-white"
           >Post Image
-          <span class="text-specialGray text-xs">[optional]</span></label
+          <span class="text-xs text-specialGray">[optional]</span></label
         >
         <input
           type="file"
@@ -489,12 +489,12 @@
           ref="postImage"
         />
         <button
-          class="w-full border-gray-400 dark:border-dark1 rounded-md border-solid border bg-gray-100 dark:bg-dark4 dark:text-white text-center p-4 cursor-pointer focus:ring focus:ring-indigo-700/75"
+          class="w-full cursor-pointer rounded-md border border-solid border-gray-400 bg-gray-100 p-4 text-center focus:ring focus:ring-indigo-700/75 dark:border-dark1 dark:bg-dark4 dark:text-white"
           @click="addImage"
           v-if="!isPostImage"
         >
           <svg
-            class="w-8 h-8 text-dark4 dark:text-gray-100 mx-auto"
+            class="mx-auto h-8 w-8 text-dark4 dark:text-gray-100"
             fill="currentColor"
             viewBox="0 0 20 20"
             xmlns="http://www.w3.org/2000/svg"
@@ -508,29 +508,29 @@
           <p class="dark:text-gray-300">CLICK TO ADD IMAGE</p>
         </button>
         <div
-          class="flex justify-between items-center gap-x-2 border-gray-400 dark:border-dark1 rounded-md border-solid border bg-gray-100 dark:bg-dark4 dark:text-white text-center p-4 relative"
+          class="relative flex items-center justify-between gap-x-2 rounded-md border border-solid border-gray-400 bg-gray-100 p-4 text-center dark:border-dark1 dark:bg-dark4 dark:text-white"
           v-else
         >
-          <div class="flex flex-col items-baseline gap-y-1 w-10/12 sm:w-3/4">
+          <div class="flex w-10/12 flex-col items-baseline gap-y-1 sm:w-3/4">
             <span
-              class="inline-block bg-gray-300 dark:bg-dark1 rounded-full pt-1 pb-1.5 px-3 text-sm overflow-hidden overflow-ellipsis max-w-full"
+              class="inline-block max-w-full overflow-hidden overflow-ellipsis rounded-full bg-gray-300 px-3 pt-1 pb-1.5 text-sm dark:bg-dark1"
               >{{ postImage?.files[0].name }}</span
             >
             <span
-              class="inline-block sm:hidden bg-gray-300 dark:bg-dark1 rounded-full pt-1 pb-1.5 px-3 text-sm whitespace-nowrap"
+              class="inline-block whitespace-nowrap rounded-full bg-gray-300 px-3 pt-1 pb-1.5 text-sm dark:bg-dark1 sm:hidden"
               >{{ getImageSize() }}</span
             >
           </div>
           <div class="flex items-center gap-x-2">
             <span
-              class="hidden sm:inline-block bg-gray-300 dark:bg-dark1 rounded-full pt-1 pb-1.5 px-3 text-sm whitespace-nowrap"
+              class="hidden whitespace-nowrap rounded-full bg-gray-300 px-3 pt-1 pb-1.5 text-sm dark:bg-dark1 sm:inline-block"
               >{{ getImageSize() }}</span
             >
             <span
-              class="cursor-pointer p-1 pb-0 dark:hover:bg-dark1 dark:text-white rounded-md"
+              class="cursor-pointer rounded-md p-1 pb-0 dark:text-white dark:hover:bg-dark1"
               @click="removeImage"
               ><svg
-                class="w-5 h-5"
+                class="h-5 w-5"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -550,14 +550,14 @@
       <div class="mt-2">
         <label
           for="select"
-          class="text-lg dark:text-white font-medium mb-1 block font-BioRhyme"
+          class="mb-1 block font-BioRhyme text-lg font-medium dark:text-white"
         >
-          Post Tags <span class="text-specialGray text-xs">[0 to 4]</span>
+          Post Tags <span class="text-xs text-specialGray">[0 to 4]</span>
         </label>
         <div class="relative">
           <select
             id="select"
-            class="postSelect appearance-none w-full mb-0 p-2 text-lg rounded-md mx-auto block resize-none textarea border-gray-400 dark:border-dark1 border-solid border bg-gray-100 dark:bg-dark4 dark:text-white"
+            class="postSelect textarea mx-auto mb-0 block w-full resize-none appearance-none rounded-md border border-solid border-gray-400 bg-gray-100 p-2 text-lg dark:border-dark1 dark:bg-dark4 dark:text-white"
             :class="tags.length > 0 ? 'rounded-br-none rounded-bl-none' : ''"
             value=""
             @change="addTag()"
@@ -568,7 +568,7 @@
             </option>
           </select>
           <svg
-            class="w-6 h-6 absolute top-3 right-3 pointer-events-none chev-down dark:text-white"
+            class="chev-down pointer-events-none absolute top-3 right-3 h-6 w-6 dark:text-white"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -583,15 +583,15 @@
           </svg>
           <div
             v-if="tags.length > 0"
-            class="tags-container w-full mb-0 p-1 pt-0.5 text-lg rounded-md mx-auto border-solid border bg-gray-100 dark:border-dark1 dark:bg-dark4 dark:text-white flex flex-wrap border-t-0 rounded-tr-none rounded-tl-none mt-1"
+            class="tags-container mx-auto mb-0 mt-1 flex w-full flex-wrap rounded-md rounded-tr-none rounded-tl-none border border-t-0 border-solid bg-gray-100 p-1 pt-0.5 text-lg dark:border-dark1 dark:bg-dark4 dark:text-white"
           >
             <div v-for="tag in tags" :key="tag">
               <div
-                class="px-3 pt-0.5 pb-1 bg-gray-300 dark:bg-dark1 rounded-full m-1 flex items-center justify-center"
+                class="m-1 flex items-center justify-center rounded-full bg-gray-300 px-3 pt-0.5 pb-1 dark:bg-dark1"
               >
                 {{ tag }}
                 <button
-                  class="w-4 h-4 bg-gray-200 dark:bg-dark4 rounded-full p-0.5 ml-2 mt-1 cursor-pointer focus:ring-2 focus:ring-indigo-700/75"
+                  class="ml-2 mt-1 h-4 w-4 cursor-pointer rounded-full bg-gray-200 p-0.5 focus:ring-2 focus:ring-indigo-700/75 dark:bg-dark4"
                   @click="removeTag(tag)"
                 >
                   <svg
@@ -623,12 +623,12 @@
   </div>
 
   <div
-    class="fixed w-full h-screen top-0 left-0 flex justify-center items-center overflow-hidden z-50"
+    class="fixed top-0 left-0 z-50 flex h-screen w-full items-center justify-center overflow-hidden"
     v-if="loading"
   >
-    <div class="bgBlur absolute bg-black bg-opacity-80 w-full h-full z-0"></div>
+    <div class="bgBlur absolute z-0 h-full w-full bg-black bg-opacity-80"></div>
     <div
-      class="wrapper z-10 bg-transparent w-11/12 max-w-prose rounded-md p-9 pt-5 pb-4"
+      class="wrapper z-10 w-11/12 max-w-prose rounded-md bg-transparent p-9 pt-5 pb-4"
     >
       <Loading />
     </div>
@@ -766,16 +766,18 @@ const go = (imageURL) => {
     .replace(/\-\-+/g, '-')
     .replace(/^-+/, '')
     .replace(/-+$/, '')
+
   db.collection('users')
-    .doc(user.value.email)
+    .doc(user.value.displayName)
     .get()
     .then((res) => {
+      console.log(res.data())
       db.collection('posts')
         .doc()
         .set({
-          by: user.value.displayName,
-          byFullName: res.data().fullName,
-          byImage: user.value.photoURL,
+          userName: user.value.displayName,
+          userFullName: res.data().fullName,
+          userImage: user.value.photoURL,
           image: imageURL,
           content: editor.value.getHTML(),
           createdAt: timestamp(),

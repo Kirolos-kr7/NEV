@@ -1,35 +1,35 @@
 <template>
   <Navbar />
-  <div class="/register pt-20 sm:pt-24 bg-primary dark:bg-dark1 py-5">
+  <div class="/register bg-primary py-5 pt-20 dark:bg-dark1 sm:pt-24">
     <div
-      class="wrapper w-full sm:w-9/12 md:w-8/12 lg:w-6/12 sm:border sm:border-gray-300 sm:dark:border-dark1 sm:border-solid mx-auto p-5 rounded-md overflow-hidden bg-white dark:bg-dark2"
+      class="wrapper mx-auto w-full overflow-hidden rounded-md bg-white p-5 dark:bg-dark2 sm:w-9/12 sm:border sm:border-solid sm:border-gray-300 sm:dark:border-dark1 md:w-8/12 lg:w-6/12"
     >
       <h2
-        class="bg-gray-200 dark:bg-dark3 dark:text-white p-5 -m-5 mb-3 text-center text-2xl font-black font-BioRhyme"
+        class="-m-5 mb-3 bg-gray-200 p-5 text-center font-BioRhyme text-2xl font-black dark:bg-dark3 dark:text-white"
       >
         Happy to have you back
       </h2>
-      <form class="px-6 mt-6">
-        <h3 class="font-medium text-gray-800 dark:text-gray-300 text-base">
+      <form class="mt-6 px-6">
+        <h3 class="text-base font-medium text-gray-800 dark:text-gray-300">
           E-mail
         </h3>
         <input
           type="text"
           v-model="email"
           autocomplete="email"
-          class="w-full px-3 mt-1 mb-6 h-10 border border-solid dark:text-white bg-gray-50 dark:bg-dark4 border-gray-300 dark:border-dark1 rounded-lg text-lg focus:outline-none focus:ring focus:ring-indigo-700/75"
+          class="mt-1 mb-6 h-10 w-full rounded-lg border border-solid border-gray-300 bg-gray-50 px-3 text-lg focus:outline-none focus:ring focus:ring-indigo-700/75 dark:border-dark1 dark:bg-dark4 dark:text-white"
         />
-        <h3 class="font-medium text-gray-800 dark:text-gray-300 text-base">
+        <h3 class="text-base font-medium text-gray-800 dark:text-gray-300">
           Password
         </h3>
         <input
           type="password"
           v-model="password"
           autocomplete="current-password"
-          class="w-full px-3 mt-1 mb-6 h-10 border border-solid dark:text-white bg-gray-50 dark:bg-dark4 border-gray-300 dark:border-dark1 rounded-lg text-lg focus:outline-none focus:ring focus:ring-indigo-700/75"
+          class="mt-1 mb-6 h-10 w-full rounded-lg border border-solid border-gray-300 bg-gray-50 px-3 text-lg focus:outline-none focus:ring focus:ring-indigo-700/75 dark:border-dark1 dark:bg-dark4 dark:text-white"
         />
         <div
-          class="err flex items-center bg-red-100 mb-6 pl-3 border border-red-300 border-solid p-2 rounded-lg transition-all"
+          class="err mb-6 flex items-center rounded-lg border border-solid border-red-300 bg-red-100 p-2 pl-3 text-white transition-all dark:border-dark1 dark:bg-red-900"
           v-if="error"
         >
           <svg
@@ -95,7 +95,7 @@
         </button>
         <router-link to="/register">
           <div
-            class="box text-center cursor-pointer mt-4 relative inline-block text-black dark:text-white"
+            class="box relative mt-4 inline-block cursor-pointer text-center text-black dark:text-white"
           >
             Don't have an Account Yet ?
             <div class="lined transition-all dark:bg-gray-300"></div>
@@ -103,7 +103,7 @@
         </router-link>
         <br />
         <div
-          class="box text-center cursor-pointer relative inline-block text-black dark:text-white"
+          class="box relative inline-block cursor-pointer text-center text-black dark:text-white"
         >
           Forgot Password ?
           <div class="lined transition-all dark:bg-gray-300"></div>
@@ -140,7 +140,7 @@ const signInWithEmailAndPassword = () => {
         })
         .catch((err) => {
           err.code === 'auth/user-not-found'
-            ? (error.value = 'No user with this data')
+            ? (error.value = 'Email does not exist')
             : (error.value = err.code)
         })
     } else {

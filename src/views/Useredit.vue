@@ -2,22 +2,26 @@
   <Navbar />
   <div v-if="loaded">
     <div
-      class="pt-20 sm:pt-24 dark:text-white w-full sm:w-11/12 md:w-11/12 lg:w-8/12 mx-auto"
+      class="mx-auto w-full pt-20 dark:text-white sm:w-11/12 sm:pt-24 md:w-11/12 lg:w-8/12"
     >
-      <h2 class="p-3 dark:text-white font-BioRhyme font-semibold text-2xl">
+      <h2 class="p-3 font-BioRhyme text-2xl font-semibold dark:text-white">
         {{ user?.displayName + "'s Settings" }}
         <Colors />
       </h2>
-      <div class="grid sm:grid-cols-[auto,1fr] gap-5">
+      <div class="grid gap-5 sm:grid-cols-[auto,1fr]">
         <ul
-          class="px-0 col-span-1"
+          class="col-span-1 px-0"
           :class="isMobile && currPage != null ? 'hidden' : ''"
         >
-          <li v-for="(option, index) in optionsList" :key="index">
+          <li
+            v-for="(option, index) in optionsList"
+            :key="index"
+            class="last-of-type:border-b dark:border-dark3 sm:last-of-type:border-none"
+          >
             <button
-              class="flex items-center hover:bg-gray-200 dark:hover:bg-dark2 focus:bg-gray-300 dark:focus:bg-dark3 w-full text-lg sm:rounded-md sm:my-2 px-5 py-2 cursor-pointer font-BioRhyme capitalize"
+              class="flex w-full cursor-pointer items-center px-5 py-2 font-BioRhyme text-lg capitalize hover:bg-gray-200 focus:bg-gray-300 dark:hover:bg-dark2 dark:focus:bg-dark3 sm:my-2 sm:rounded-md"
               @click="currPage = option"
-              :class="isMobile ? '' : ''"
+              :class="isMobile ? 'border-t dark:border-dark3' : ''"
             >
               {{ option }}
             </button>
@@ -26,11 +30,11 @@
 
         <div
           v-if="isMobile && currPage != null"
-          class="flex items-center sm:hidden bg-dark3"
+          class="flex items-center bg-dark3 sm:hidden"
         >
-          <button class="w-12 h-12 p-2.5" @click="currPage = null">
+          <button class="h-12 w-12 p-2.5" @click="currPage = null">
             <svg
-              class="w-full h-full"
+              class="h-full w-full"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -45,19 +49,19 @@
             </svg>
           </button>
 
-          <h3 class="p-3 dark:text-white font-BioRhyme font-medium text-xl">
+          <h3 class="p-3 font-BioRhyme text-xl font-medium dark:text-white">
             {{ currPage }}
           </h3>
         </div>
 
         <div
-          class="px-3 sm:px-0 bg-white dark:bg-dark2 border border-gray-300 border-solid dark:border-transparent sm:rounded-md"
+          class="border border-solid border-gray-300 bg-white px-3 dark:border-transparent dark:bg-dark2 sm:rounded-md sm:px-0"
           v-if="currPage === 'Personal Information'"
         >
-          <EditPersonal :pps="pps" />
+          <EditPersonal :userData="userData" />
         </div>
         <div
-          class="max-w-prose px-3 sm:px-0 bg-white dark:bg-dark2 border border-gray-300 border-solid dark:border-transparent sm:rounded-md"
+          class="max-w-prose border border-solid border-gray-300 bg-white px-3 dark:border-transparent dark:bg-dark2 sm:rounded-md sm:px-0"
           v-if="currPage === 'Change Password'"
         >
           <ChangePassword />
@@ -86,15 +90,10 @@ let user = computed(() => {
 
 let isMobile = ref(false)
 
-let currPage = ref('Change Password')
+let currPage = ref('Personal Information')
 
 let userData = ref({}),
   loaded = ref(false),
-  fullName = ref(),
-  location = ref(),
-  website = ref(),
-  email = ref(),
-  bio = ref(),
   countries = ref([
     { name: 'Afghanistan', code: 'AF' },
     { name: 'Åland Islands', code: 'AX' },
@@ -342,15 +341,6 @@ let userData = ref({}),
     { name: 'Zimbabwe', code: 'ZW' },
   ])
 
-const pps = ref({
-  fullName,
-  location,
-  website,
-  email,
-  countries,
-  bio,
-})
-
 onMounted(() => {
   isMobile.value = navigator.userAgentData.mobile || window.innerWidth < 640
   window.addEventListener(
@@ -361,20 +351,17 @@ onMounted(() => {
     { passive: true },
   )
 
-  // if (isMobile.value) currPage.value = null
+  if (isMobile.value) currPage.value = null
 
   db.collection('users')
-    .where('email', '==', user.value.email)
+    .where('username', '==', user.value.displayName)
     .limit(1)
     .get()
     .then((res) => {
       res.forEach((user) => {
         userData.value = user.data()
-        fullName.value = user.data().fullName
-        location.value = user.data().location
-        website.value = user.data().website
-        email.value = user.data().email
-        bio.value = user.data().bio
+        userData.value.countries = countries.value
+
         loaded.value = true
       })
     })

@@ -1,32 +1,32 @@
 <template>
   <Navbar />
-  <div class="pt-20 sm:pt-24 dark:bg-dark1">
+  <div class="pt-20 dark:bg-dark1 sm:pt-24">
     <div v-if="user">
       <div v-if="loaded">
         <div
           v-if="posts.length > 0"
-          class="w-full sm:w-8/12 mx-auto dark:text-white"
+          class="mx-auto w-full dark:text-white sm:w-8/12"
         >
           <transition appear name="fadeIn">
             <h2
-              class="p-3 dark:text-white font-BioRhyme font-semibold text-2xl"
+              class="p-3 font-BioRhyme text-2xl font-semibold dark:text-white"
             >
               Posts You Liked
               <Colors />
             </h2>
           </transition>
           <div
-            class="posts mt-2 grid md:grid-cols-2 gap-x-5 items-center justify-evenly"
+            class="mt-2 grid items-baseline justify-evenly gap-x-5 md:grid-cols-2"
           >
             <Post :posts="posts" :thumbnail="true" />
           </div>
         </div>
         <div
           v-else
-          class="wrapper w-full sm:w-9/12 md:w-8/12 lg:w-6/12 mb-6 sm:border sm:border-gray-300 sm:dark:border-dark1 sm:border-solid mx-auto p-5 rounded-md overflow-hidden bg-white dark:bg-dark2"
+          class="mx-auto mb-6 w-full overflow-hidden rounded-md bg-white p-5 dark:bg-dark2 sm:w-9/12 sm:border sm:border-solid sm:border-gray-300 sm:dark:border-dark1 md:w-8/12 lg:w-6/12"
         >
           <h2
-            class="bg-gray-200 dark:bg-dark3 dark:text-white p-5 -m-5 mb-3 text-center text-2xl font-semibold font-BioRhyme"
+            class="-m-5 mb-3 bg-gray-200 p-5 text-center font-BioRhyme text-2xl font-semibold dark:bg-dark3 dark:text-white"
           >
             You don't have any liked posts yet
           </h2>
@@ -39,10 +39,10 @@
     </div>
     <div
       v-else
-      class="wrapper w-full sm:w-9/12 md:w-8/12 lg:w-6/12 mb-6 sm:border sm:border-gray-300 sm:dark:border-dark1 sm:border-solid mx-auto p-5 rounded-md overflow-hidden bg-white dark:bg-dark2"
+      class="mx-auto mb-6 w-full overflow-hidden rounded-md bg-white p-5 dark:bg-dark2 sm:w-9/12 sm:border sm:border-solid sm:border-gray-300 sm:dark:border-dark1 md:w-8/12 lg:w-6/12"
     >
       <h2
-        class="bg-gray-200 dark:bg-dark3 dark:text-white p-5 -m-5 mb-3 text-center text-2xl font-semibold font-BioRhyme"
+        class="-m-5 mb-3 bg-gray-200 p-5 text-center font-BioRhyme text-2xl font-semibold dark:bg-dark3 dark:text-white"
       >
         You Need To Login First
       </h2>

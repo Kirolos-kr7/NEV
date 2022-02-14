@@ -1,6 +1,6 @@
 import { createWebHistory, createRouter } from 'vue-router'
-import newUser from './views/newUser.vue'
-import existingUser from './views/existingUser.vue'
+import RegisterUser from './views/RegisterUser.vue'
+import LoginUser from './views/LoginUser.vue'
 import E404 from './views/404.vue'
 import Posts from './views/Posts.vue'
 import Tags from './views/Tags.vue'
@@ -8,7 +8,7 @@ import Post from './views/Post.vue'
 import User from './views/User.vue'
 import NewPost from './views/NewPost.vue'
 import Saved from './views/Saved.vue'
-import Useredit from './views/Useredit.vue'
+import UserEdit from './views/UserEdit.vue'
 import { store } from './store'
 import { isRegistered } from './firebase'
 
@@ -25,24 +25,24 @@ const routes = [
   },
   {
     path: '/login',
-    name: 'existingUser',
-    component: existingUser,
+    name: 'Login User',
+    component: LoginUser,
     meta: {
       registerPage: true,
     },
   },
   {
     path: '/register',
-    name: 'newUser',
-    component: newUser,
+    name: 'Register User',
+    component: RegisterUser,
     meta: {
       registerPage: true,
     },
   },
   {
     path: '/u/edit',
-    name: 'Useredit',
-    component: Useredit,
+    name: 'User Edit',
+    component: UserEdit,
     meta: {
       requireAuth: true,
     },

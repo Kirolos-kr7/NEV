@@ -11,7 +11,7 @@ const emits = defineEmits(['accept', 'cancel'])
 
 <template>
   <div
-    class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 max-w-prose w-full rounded-md p-5 overflow-auto max-h-[85vh] bg-white dark:bg-dark2 dark:text-white"
+    class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40 max-w-prose w-full sm:rounded-md p-5 overflow-auto max-h-[85vh] bg-white dark:bg-dark2 dark:text-white scale-100"
   >
     <h2 class="dark:text-white font-BioRhyme font-semibold text-2xl mb-3">
       {{ title }}

@@ -1,25 +1,32 @@
 <script setup>
 import { Cropper, CircleStencil } from 'vue-advanced-cropper'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { store } from '../store'
 import { storage, auth, db } from '../firebase'
 import 'vue-advanced-cropper/dist/style.css'
 import Colors from './Colors.vue'
 import Loading from './Loading.vue'
 import VImage from './VImage.vue'
+import ConfirmationDialog from './ConfirmationDialog.vue'
 
 const cropper = ref()
+const file = ref()
+const image = ref()
+const isLoading = ref(false)
+const cd = ref(false)
 const props = defineProps({
   img: { type: String },
   isCurrent: { type: Boolean },
 })
 
-const file = ref()
-const image = ref()
-const isLoading = ref(false)
+const imageLoaded = computed(() => {
+  if (cropper.value) return cropper.value.$data.imageLoaded
+  else return false
+})
 
 const fileChange = (e) => {
-  if (e.target.files[0]) image.value = URL.createObjectURL(e.target.files[0])
+  if (e.target.files[0] && e.target.files[0].type.split('/')[0] === 'image')
+    image.value = URL.createObjectURL(e.target.files[0])
 }
 
 const cancelImageChange = () => {
@@ -58,9 +65,7 @@ const uploadImage = () => {
 }
 
 const fbStorageUpload = async (blob) => {
-  const stRef = storage.ref(
-    'users/' + store.state.user.displayName + '.' + blob.type.split('/')[1],
-  )
+  const stRef = storage.ref('users/' + store.state.user.displayName + '.jpeg')
 
   await stRef.put(blob)
   await stRef.getDownloadURL().then((url) => {
@@ -70,7 +75,7 @@ const fbStorageUpload = async (blob) => {
       })
       .then(() => {
         db.collection('users')
-          .doc(store.state.user.email)
+          .doc(store.state.user.displayName)
           .update({
             image: url,
           })
@@ -81,8 +86,15 @@ const fbStorageUpload = async (blob) => {
   })
 }
 
+const changeCd = () => {
+  cd.value = !cd.value
+  if (cd.value) document.body.style.overflow = 'hidden'
+  else document.body.style.overflow = 'auto'
+}
+
 const removeImage = async () => {
   isLoading.value = true
+  changeCd()
   const stRef = storage.refFromURL(props.img)
 
   await stRef.delete()
@@ -99,16 +111,16 @@ const removeImage = async () => {
 
 <template>
   <div
-    class="p-3 max-w-prose overflow-auto max-h-[85vh] bg-white dark:bg-dark2 dark:text-white relative rounded-md"
-    :class="image ? 'min-w-full md:min-w-[65ch]' : ''"
+    class="xs:w-auto fixed top-1/2 left-1/2 z-40 max-h-[85vh] w-full max-w-prose origin-top-left -translate-x-1/2 -translate-y-1/2 overflow-auto bg-white p-3 dark:bg-dark2 dark:text-white sm:rounded-md"
+    :class="image ? 'min-w-full md:min-w-[65ch] ' : ''"
   >
     <div class="flex items-start justify-between">
-      <h2 class="dark:text-white font-BioRhyme font-semibold text-2xl">
+      <h2 class="font-BioRhyme text-2xl font-semibold dark:text-white">
         Profile Picture
         <Colors class="mb-3" />
       </h2>
     </div>
-    <div class="w-full sm:w-[320px] mx-auto" v-if="!image">
+    <div class="mx-auto w-full sm:w-[320px]" v-if="!image">
       <VImage :src="img" type="user" />
     </div>
 
@@ -131,31 +143,35 @@ const removeImage = async () => {
     />
 
     <div
-      class="grid grid-cols-2 gap-2 justify-end mt-3"
+      class="mt-3 grid grid-cols-2 justify-end gap-2"
       v-if="!image && isCurrent && img"
     >
-      <button class="btn-medium redish !w-auto block" @click="removeImage">
+      <button class="btn-medium redish block !w-auto" @click="changeCd">
         Remove
       </button>
-      <button class="btn-medium blueish !w-auto block" @click="file.click()">
+      <button class="btn-medium blueish block !w-auto" @click="file.click()">
         Change
       </button>
     </div>
 
     <div
-      class="grid grid-cols-1 gap-2 justify-end mt-3"
+      class="mt-3 grid grid-cols-1 justify-end gap-2"
       v-if="!image && isCurrent && !img"
     >
-      <button class="btn-medium blueish !w-auto block" @click="file.click()">
+      <button class="btn-medium blueish block !w-auto" @click="file.click()">
         Select
       </button>
     </div>
 
-    <div class="flex gap-2 justify-end mt-3" v-if="image">
-      <button class="btn-medium blueish w-full block" @click="uploadImage">
+    <div class="mt-3 flex justify-end gap-2" v-if="image">
+      <button
+        class="btn-medium blueish block w-full"
+        @click="uploadImage"
+        v-if="imageLoaded"
+      >
         Update
       </button>
-      <button class="btn-medium redish w-full block" @click="cancelImageChange">
+      <button class="btn-medium redish block w-full" @click="cancelImageChange">
         Cancel
       </button>
     </div>
@@ -163,8 +179,26 @@ const removeImage = async () => {
 
   <div
     v-if="isLoading"
-    class="absolute z-40 top-0 left-0 w-full h-full bg-black/40 backdrop-blur-sm"
+    class="fixed top-0 left-0 z-50 h-full w-full bg-black/40 backdrop-blur-sm"
   >
     <Loading />
   </div>
+
+  <transition name="fade">
+    <div
+      v-if="cd"
+      class="fixed top-0 left-0 z-40 h-full w-full bg-black/30 backdrop-blur-sm"
+      @click="changeCd"
+    ></div>
+  </transition>
+  <transition name="zoom">
+    <ConfirmationDialog
+      v-if="cd"
+      class="origin-top-left"
+      title="Remove Image"
+      text="Are you sure you want to proceed?"
+      @accept="removeImage"
+      @cancel="changeCd"
+    />
+  </transition>
 </template>

@@ -18,6 +18,7 @@ export const db = firebase.firestore()
 export const timestamp = firebase.firestore.FieldValue.serverTimestamp
 export const auth = firebase.auth()
 export const storage = firebase.storage()
+export const batch = firebase.firestore().batch()
 
 export const isRegistered = new Promise((reslove, reject) => {
   auth.onAuthStateChanged((user) => {

@@ -1,9 +1,136 @@
+<script setup>
+import { computed, ref } from 'vue'
+import { auth, db } from '../firebase'
+import { store } from '../store'
+import Loading from '../components/Loading.vue'
+import ConfirmationDialog from './ConfirmationDialog.vue'
+import { useRouter } from 'vue-router'
+import ErrorDialog from './ErrorDialog.vue'
+let error = ref(''),
+  isLoading = ref(false),
+  FN_REGEX = /^[A-Za-z- ]{3,}$/,
+  E_REGEX = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
+  WEBSITE_REGEX =
+    /^((https?|ftp|smtp):\/\/)?(www.)?[a-z0-9]+\.[a-z]+(\/[a-zA-Z0-9#]+\/?)*$/
+
+const props = defineProps({
+  userData: Object,
+})
+
+const router = useRouter()
+const data = ref(props.userData)
+const cd = ref(false)
+const ed = ref(false)
+
+const user = computed(() => {
+  return store.state.user
+})
+
+const updateUser = () => {
+  if (data.value.fullName.match(FN_REGEX)) {
+    error.value = ''
+    if (data.value.email.match(E_REGEX)) {
+      error.value = ''
+      if (
+        data.value.website.match(WEBSITE_REGEX) ||
+        data.value.website === ''
+      ) {
+        error.value = ''
+        go()
+      } else {
+        error.value = 'Website is not valid'
+      }
+    } else {
+      error.value = 'E-mail is not valid'
+    }
+  } else {
+    error.value =
+      'Full Name is not valid \nAtleast three characters (no numbers)'
+  }
+}
+
+const go = () => {
+  isLoading.value = true
+  db.collection('users')
+    .doc(data.value.username)
+    .update({
+      fullName: data.value.fullName,
+      location: data.value.location,
+      website: data.value.website,
+      bio: data.value.bio,
+    })
+    .then(() => {
+      location.reload()
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+}
+
+const removeUser = async () => {
+  const batch = db.batch()
+
+  isLoading.value = true
+  changeCd()
+
+  const thisUser = auth.currentUser
+  await thisUser
+    .delete()
+    .then(async () => {
+      let user = await db.collection('users').doc(thisUser.displayName).get()
+
+      batch.delete(user.ref)
+      db.collection('posts')
+        .where('userName', '==', thisUser.displayName)
+        .get()
+        .then((res) => {
+          res.docs.forEach((doc) => {
+            batch.delete(doc.ref)
+          })
+        })
+
+      await db
+        .collection('comments')
+        .where('userName', '==', thisUser.displayName)
+        .get()
+        .then((res) => {
+          res.forEach((doc) => {
+            batch.delete(doc.ref)
+          })
+        })
+
+      await batch.commit()
+
+      isLoading.value = false
+      router.push('/')
+    })
+    .catch((err) => {
+      ed.value = true
+      error.value = err.message
+      console.log(err.code)
+      isLoading.value = false
+    })
+}
+
+const changeCd = () => {
+  cd.value = !cd.value
+  if (cd.value) document.body.style.overflow = 'hidden'
+  else document.body.style.overflow = 'auto'
+}
+
+const changeEd = () => {
+  ed.value = !ed.value
+  if (ed.value) document.body.style.overflow = 'hidden'
+  else document.body.style.overflow = 'auto'
+}
+</script>
+
 <template>
   <form class="p-3 py-5">
-    <div class="input-wrapper w-full sm:px-2 mb-4">
+    <div class="input-wrapper mb-4 w-full sm:px-2">
       <label
         for="fullName"
-        class="font-medium text-gray-800 dark:text-white text-base"
+        class="text-base font-medium text-gray-800 dark:text-white"
       >
         Full Name
       </label>
@@ -11,23 +138,23 @@
         type="text"
         id="fullName"
         v-model="data.fullName"
-        class="w-full px-3 mt-1 h-10 border border-solid dark:text-white bg-gray-50 dark:bg-dark4 border-gray-300 dark:border-dark1 rounded-lg text-lg"
+        class="mt-1 h-10 w-full rounded-lg border border-solid border-gray-300 bg-gray-50 px-3 text-lg dark:border-dark1 dark:bg-dark4 dark:text-white"
         autocomplete="on"
         required
       />
     </div>
 
-    <div class="input-wrapper location-wrapper relative w-full sm:px-2 mb-4">
+    <div class="input-wrapper location-wrapper relative mb-4 w-full sm:px-2">
       <label
         for="location"
-        class="font-medium text-gray-800 dark:text-white text-base"
+        class="text-base font-medium text-gray-800 dark:text-white"
       >
         Location
       </label>
       <select
         name="location"
         id="location"
-        class="location w-full appearance-none cursor-pointer px-3 mt-1 h-10 border border-solid dark:text-white bg-gray-50 dark:bg-dark4 border-gray-300 dark:border-dark1 rounded-lg text-lg"
+        class="location mt-1 h-10 w-full cursor-pointer appearance-none rounded-lg border border-solid border-gray-300 bg-gray-50 px-3 text-lg dark:border-dark1 dark:bg-dark4 dark:text-white"
         v-model="data.location"
         required
       >
@@ -41,7 +168,7 @@
         </option>
       </select>
       <svg
-        class="w-6 h-6 absolute top-9 right-5 pointer-events-none chev-down dark:text-white"
+        class="chev-down pointer-events-none absolute top-9 right-5 h-6 w-6 dark:text-white"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"
@@ -57,18 +184,18 @@
       </svg>
     </div>
 
-    <div class="input-wrapper relative w-full sm:px-2 mb-4">
+    <div class="input-wrapper relative mb-4 w-full sm:px-2">
       <label
         for="website"
-        class="font-medium text-gray-800 dark:text-white text-base"
+        class="text-base font-medium text-gray-800 dark:text-white"
       >
-        Website <span class="text-specialGray text-xs">[Optional]</span>
+        Website <span class="text-xs text-specialGray">[Optional]</span>
       </label>
       <input
         type="text"
         id="website"
         v-model="data.website"
-        class="w-full px-3 mt-1 h-10 border border-solid dark:text-white bg-gray-50 dark:bg-dark4 border-gray-300 dark:border-dark1 rounded-lg text-lg"
+        class="mt-1 h-10 w-full rounded-lg border border-solid border-gray-300 bg-gray-50 px-3 text-lg dark:border-dark1 dark:bg-dark4 dark:text-white"
         autocomplete="on"
         required
       />
@@ -77,12 +204,12 @@
     <div class="input-wrapper relative w-full sm:px-2">
       <label
         for="bio"
-        class="font-medium text-gray-800 dark:text-white text-base"
+        class="text-base font-medium text-gray-800 dark:text-white"
       >
-        Bio <span class="text-specialGray text-xs">[Optional]</span>
+        Bio <span class="text-xs text-specialGray">[Optional]</span>
       </label>
       <textarea
-        class="w-full px-3 py-1 mt-1 border border-solid dark:text-white bg-gray-50 dark:bg-dark4 border-gray-300 dark:border-dark1 rounded-lg text-lg"
+        class="mt-1 w-full rounded-lg border border-solid border-gray-300 bg-gray-50 px-3 py-1 text-lg dark:border-dark1 dark:bg-dark4 dark:text-white"
         v-model="data.bio"
         id="bio"
         rows="4"
@@ -90,7 +217,7 @@
     </div>
 
     <div
-      class="err flex items-center text-white bg-red-100 dark:bg-red-900 pl-3 border border-red-300 dark:border-dark1 border-solid p-2 mx-2 my-1 rounded-lg transition-all"
+      class="err mx-2 my-1 flex items-center rounded-lg border border-solid border-red-300 bg-red-100 p-2 pl-3 text-white transition-all dark:border-dark1 dark:bg-red-900"
       v-if="error"
     >
       <svg
@@ -148,7 +275,7 @@
       </svg>
       <span class="ml-2 whitespace-pre-wrap"> {{ error }}</span>
     </div>
-    <div class="grid sm:grid-cols-2 gap-3 sm:px-2 mt-3">
+    <div class="mt-3 grid gap-3 sm:grid-cols-2 sm:px-2">
       <button class="btn-medium redish !w-full" @click.prevent="changeCd">
         Remove Account
       </button>
@@ -159,107 +286,49 @@
   </form>
 
   <div
-    class="fixed w-full h-screen top-0 left-0 flex justify-center items-center overflow-hidden z-50"
+    class="fixed top-0 left-0 z-50 flex h-screen w-full items-center justify-center overflow-hidden"
     v-if="isLoading"
   >
-    <div class="bgBlur absolute bg-black bg-opacity-80 w-full h-full z-0"></div>
+    <div class="bgBlur absolute z-0 h-full w-full bg-black bg-opacity-80"></div>
     <div
-      class="wrapper z-10 bg-transparent w-11/12 max-w-prose rounded-md p-9 pt-5 pb-4"
+      class="wrapper z-10 w-11/12 max-w-prose rounded-md bg-transparent p-9 pt-5 pb-4"
     >
       <Loading />
     </div>
   </div>
 
-  <div v-if="cd">
+  <transition name="fade">
     <div
-      class="fixed top-0 left-0 bg-black/30 backdrop-blur-sm w-full h-full z-40"
+      v-if="cd"
+      class="fixed top-0 left-0 z-40 h-full w-full bg-black/30 backdrop-blur-sm"
       @click="changeCd"
     ></div>
+  </transition>
+  <transition name="zoom">
     <ConfirmationDialog
+      v-if="cd"
+      class="origin-top-left"
       title="Remove Account"
       text="Are you sure you want to proceed?"
       @accept="removeUser"
       @cancel="changeCd"
     />
-  </div>
+  </transition>
+
+  <transition name="fade">
+    <div
+      v-if="ed"
+      class="fixed top-0 left-0 z-40 h-full w-full bg-black/30 backdrop-blur-sm"
+      @click="changeEd"
+    ></div>
+  </transition>
+  <transition name="zoom">
+    <ErrorDialog
+      v-if="ed"
+      class="origin-top-left"
+      title="Error"
+      :text="error"
+      @press="changeEd"
+    />
+  </transition>
 </template>
-
-<script setup>
-import { computed, ref } from 'vue'
-import { auth, db } from '../firebase'
-import { store } from '../store'
-import Loading from '../components/Loading.vue'
-import ConfirmationDialog from './ConfirmationDialog.vue'
-let error = ref(''),
-  isLoading = ref(false),
-  FN_REGEX = /^[A-Za-z- ]{3,}$/,
-  E_REGEX = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/,
-  WEBSITE_REGEX = /^((https?|ftp|smtp):\/\/)?(www.)?[a-z0-9]+\.[a-z]+(\/[a-zA-Z0-9#]+\/?)*$/
-
-const props = defineProps({
-  pps: Object,
-})
-
-const data = ref(props.pps)
-const cd = ref(false)
-
-const user = computed(() => {
-  return store.state.user
-})
-
-const updateUser = () => {
-  if (data.value.fullName.match(FN_REGEX)) {
-    error.value = ''
-    if (data.value.email.match(E_REGEX)) {
-      error.value = ''
-      if (
-        data.value.website.match(WEBSITE_REGEX) ||
-        data.value.website === ''
-      ) {
-        error.value = ''
-        go()
-      } else {
-        error.value = 'Website is not valid'
-      }
-    } else {
-      error.value = 'E-mail is not valid'
-    }
-  } else {
-    error.value =
-      'Full Name is not valid \nAtleast three characters (no numbers)'
-  }
-}
-
-const go = () => {
-  isLoading.value = true
-  db.collection('users')
-    .doc(data.value.email)
-    .update({
-      fullName: data.value.fullName,
-      location: data.value.location,
-      website: data.value.website,
-      bio: data.value.bio,
-    })
-    .then(() => {
-      location.reload()
-    })
-    .catch((err) => {
-      console.log(err)
-    })
-}
-
-const removeUser = () => {
-  const user = auth.currentUser
-  isLoading.value = true
-
-  user.delete()
-  db.collection('users').doc(user.email).delete()
-  location.reload()
-}
-
-const changeCd = () => {
-  cd.value = !cd.value
-  if (cd.value) document.body.style.overflow = 'hidden'
-  else document.body.style.overflow = 'auto'
-}
-</script>

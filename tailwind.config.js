@@ -26,6 +26,9 @@ module.exports = {
       maxHeight: {
         pic: '350px',
       },
+      maxWidth: {
+        kratos: '1600px',
+      },
       spacing: {
         18: '4.4rem',
       },
